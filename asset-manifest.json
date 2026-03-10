@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/EduSphere-LMS/static/css/main.c4de1e70.css",
+    "main.js": "/EduSphere-LMS/static/js/main.54af35eb.js",
+    "index.html": "/EduSphere-LMS/index.html",
+    "main.c4de1e70.css.map": "/EduSphere-LMS/static/css/main.c4de1e70.css.map",
+    "main.54af35eb.js.map": "/EduSphere-LMS/static/js/main.54af35eb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c4de1e70.css",
+    "static/js/main.54af35eb.js"
+  ]
+}
