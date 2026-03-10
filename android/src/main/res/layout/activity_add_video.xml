@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#007AFF"
+            android:elevation="4dp"
+            android:navigationIcon="@android:drawable/ic_dialog_close"
+            android:title="Upload Video" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            
+            <!-- Video Title -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Video Title"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+                
+                <EditText
+                    android:id="@+id/titleInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Enter video title"
+                    android:padding="12dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+            
+            <!-- Video Description -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+                
+                <EditText
+                    android:id="@+id/descriptionInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:hint="Enter video description"
+                    android:padding="12dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:textColor="@android:color/black"
+                    android:gravity="top" />
+            </LinearLayout>
+            
+            <!-- Video Source Selection -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Video Source"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+                
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    
+                    <RadioButton
+                        android:id="@+id/uploadRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload File" />
+                    
+                    <RadioButton
+                        android:id="@+id/youtubeRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="YouTube URL" />
+                </RadioGroup>
+            </LinearLayout>
+            
+            <!-- Upload Video Layout -->
+            <LinearLayout
+                android:id="@+id/uploadVideoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                
+                <Button
+                    android:id="@+id/selectVideoBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Select Video File"
+                    android:backgroundTint="#FFA500"
+                    android:layout_marginBottom="8dp" />
+                
+                <TextView
+                    android:id="@+id/videoStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No video selected"
+                    android:textColor="#666666"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp" />
+                
+                <Button
+                    android:id="@+id/selectThumbnailBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Select Thumbnail"
+                    android:backgroundTint="#FFA500" />
+                
+                <TextView
+                    android:id="@+id/thumbnailStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No thumbnail selected"
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
+            </LinearLayout>
+            
+            <!-- YouTube URL Layout -->
+            <LinearLayout
+                android:id="@+id/youtubeUrlLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="YouTube URL"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+                
+                <EditText
+                    android:id="@+id/youtubeUrlInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Paste YouTube video URL"
+                    android:padding="12dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:textColor="@android:color/black"
+                    android:inputType="textUri" />
+            </LinearLayout>
+            
+            <!-- Duration Input -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Duration (seconds)"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+                
+                <EditText
+                    android:id="@+id/durationInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Enter video duration in seconds"
+                    android:padding="12dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:textColor="@android:color/black"
+                    android:inputType="number" />
+            </LinearLayout>
+            
+            <!-- Upload Button -->
+            <Button
+                android:id="@+id/uploadBtn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Upload Video"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="#007AFF"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

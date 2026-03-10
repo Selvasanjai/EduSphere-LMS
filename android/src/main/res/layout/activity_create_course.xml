@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#007AFF"
+            android:elevation="4dp"
+            android:navigationIcon="@android:drawable/ic_dialog_close"
+            android:title="Create Course" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            
+            <!-- Course Title -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Course Title"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+                
+                <EditText
+                    android:id="@+id/titleInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Enter course title"
+                    android:padding="12dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+            
+            <!-- Course Description -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+                
+                <EditText
+                    android:id="@+id/descriptionInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:hint="Enter course description"
+                    android:padding="12dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:textColor="@android:color/black"
+                    android:gravity="top" />
+            </LinearLayout>
+            
+            <!-- Category -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category (Optional)"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+                
+                <EditText
+                    android:id="@+id/categoryInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="e.g., Programming, Mathematics"
+                    android:padding="12dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+            
+            <!-- Loading Indicator -->
+            <ProgressBar
+                android:id="@+id/loadingProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone" />
+            
+            <!-- Create Button -->
+            <Button
+                android:id="@+id/createBtn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Create Course"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="#007AFF"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

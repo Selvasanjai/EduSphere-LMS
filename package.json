@@ -1,0 +1,13 @@
+{
+  "name": "edusphere",
+  "version": "1.0.0",
+  "description": "EduSphere - Full Stack LMS",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm start",
+    "start": "cd backend && npm start"
+  },
+  "author": "EduSphere Team",
+  "license": "MIT"
+}

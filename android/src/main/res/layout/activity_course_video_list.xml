@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#007AFF"
+        android:elevation="4dp"
+        android:navigationIcon="@android:drawable/ic_dialog_close"
+        android:title="Course Videos" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+        
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Videos"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        
+        <Button
+            android:id="@+id/addVideoBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="+ Add Video"
+            android:textSize="12sp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:backgroundTint="#007AFF"
+            android:visibility="gone" />
+    </LinearLayout>
+    
+    <!-- Loading Indicator -->
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
+        android:visibility="gone" />
+    
+    <!-- Videos RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/videosRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp" />
+    
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/emptyState"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No videos in this course"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add your first video to get started"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

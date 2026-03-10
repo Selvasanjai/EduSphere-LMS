@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EduSphere</string>
+    <string name="app_description">Learning Management System for Android</string>
+    
+    <!-- Authentication -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="role">Role</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="login_here">Login here</string>
+    <string name="register_here">Register here</string>
+    
+    <!-- Courses -->
+    <string name="courses">Courses</string>
+    <string name="course_title">Course Title</string>
+    <string name="course_description">Course Description</string>
+    <string name="no_courses">No courses yet</string>
+    <string name="create_course">Create Course</string>
+    <string name="enrolled_courses">Enrolled Courses</string>
+    
+    <!-- Videos -->
+    <string name="videos">Videos</string>
+    <string name="video_title">Video Title</string>
+    <string name="video_description">Video Description</string>
+    <string name="upload_video">Upload Video</string>
+    <string name="add_video">Add Video</string>
+    <string name="no_videos">No videos in this course</string>
+    <string name="video_duration">Duration</string>
+    <string name="video_progress">Progress</string>
+    
+    <!-- Attendance -->
+    <string name="attendance">Attendance</string>
+    <string name="mark_attendance">Mark Attendance</string>
+    <string name="view_attendance">View Attendance</string>
+    <string name="present">Present</string>
+    <string name="absent">Absent</string>
+    <string name="partial">Partial</string>
+    
+    <!-- Dashboard -->
+    <string name="staff_dashboard">Staff Dashboard</string>
+    <string name="student_dashboard">Student Dashboard</string>
+    <string name="admin_dashboard">Admin Dashboard</string>
+    <string name="your_courses">Your Courses</string>
+    <string name="new_course">New Course</string>
+    
+    <!-- Common -->
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="logout">Logout</string>
+    
+    <!-- Spinner Options -->
+    <string-array name="user_roles">
+        <item>Student</item>
+        <item>Staff</item>
+        <item>Admin</item>
+    </string-array>
+</resources>
