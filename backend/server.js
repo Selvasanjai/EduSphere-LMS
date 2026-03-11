@@ -12,7 +12,7 @@ const courseRoutes = require('./routes/course.routes');
 const enrollmentRoutes = require('./routes/enrollment.routes');
 const attendanceRoutes = require('./routes/attendance.routes');
 const assignmentRoutes = require('./routes/assignment.routes');
-const certificateRoutes = require('./routes/certificate.routes');
+// const certificateRoutes = require('./routes/certificate.routes'); // Temporarily disabled
 const analyticsRoutes = require('./routes/analytics.routes');
 const quizRoutes = require('./routes/quiz.routes');
 const liveclassRoutes = require('./routes/liveclass.routes');
@@ -43,7 +43,7 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/assignments', assignmentRoutes);
-app.use('/api/certificates', certificateRoutes);
+// app.use('/api/certificates', certificateRoutes); // Temporarily disabled
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/live-classes', liveclassRoutes);

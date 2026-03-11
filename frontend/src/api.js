@@ -1,7 +1,7 @@
 // Global API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 
   (process.env.NODE_ENV === 'production' 
-    ? 'https://your-backend-url.railway.app/api'  // Will be replaced by Vercel env var
-    : 'http://localhost:5000/api');
+    ? '/api'  // Use relative path in production
+    : 'http://localhost:5001/api');
 
 export default API_BASE_URL;

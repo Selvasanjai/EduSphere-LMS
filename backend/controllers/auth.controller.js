@@ -35,8 +35,7 @@ exports.register = async (req, res) => {
       isApproved: role === 'student' ? true : false
     });
 
-    console.log('User registered:', user.email);
-    // TODO: Send verification email using nodemailer
+        // TODO: Send verification email using nodemailer
     sendToken(user, 201, res);
   } catch (err) {
     console.error('Register error:', err.message);
@@ -76,11 +75,9 @@ exports.login = async (req, res) => {
     user.lastLogin = new Date();
     await user.save({ validateBeforeSave: false });
 
-    console.log('User logged in:', user.email);
-    sendToken(user, 200, res);
+        sendToken(user, 200, res);
   } catch (err) {
-    console.error('Login error:', err.message);
-    res.status(500).json({ success: false, message: 'Login failed. Please try again.' });
+    res.status(500).json({ success: false, message: err.message || 'Login failed. Please try again.' });
   }
 };
 

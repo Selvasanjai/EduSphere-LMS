@@ -1,9 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import axios from 'axios';
-import API_BASE_URL from '../api';
 
-const API = API_BASE_URL;
+// Global API Configuration
+const API = process.env.REACT_APP_API_URL || 
+  (process.env.NODE_ENV === 'production' 
+    ? '/api'  
+    : 'http://localhost:5001/api');
 
 const useAuthStore = create(
   persist(
@@ -16,27 +19,45 @@ const useAuthStore = create(
       login: async (email, password) => {
         set({ loading: true, error: null });
         try {
-          console.log('Login request to:', `${API}/auth/login`);
-          const { data } = await axios.post(`${API}/auth/login`, { email, password });
-          console.log('Login response:', data);
+          console.log('🔍 Login attempt:', { email, api: API });
           
-          if (!data.token) {
-            throw new Error('No token received from server');
+          const response = await axios.post(`${API}/auth/login`, { 
+            email, 
+            password 
+          }, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            timeout: 10000
+          });
+          
+          console.log('📊 Login response:', response.status, response.data);
+          
+          if (!response.data || !response.data.success) {
+            throw new Error(response.data?.message || 'Login failed');
           }
           
-          axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-          localStorage.setItem('token', data.token);
-          set({ user: data.user, token: data.token, loading: false });
-          return data;
+          const token = response.data.token;
+          const user = response.data.user;
+          
+          if (!token || !user) {
+            throw new Error('Invalid response from server');
+          }
+          
+          // Set axios default header for future requests
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          localStorage.setItem('token', token);
+          
+          set({ user, token, loading: false });
+          
+          console.log('✅ Login successful:', { user: user.name, role: user.role });
+          return { success: true, user, token };
+          
         } catch (err) {
-          console.error('Login error details:', {
-            status: err.response?.status,
-            message: err.response?.data?.message,
-            data: err.response?.data,
-            error: err.message
-          });
-          const errorMsg = err.response?.data?.message || err.message || 'Login failed';
-          set({ loading: false, error: errorMsg });
+          console.error('❌ Login error:', err);
+          const errorMessage = err.response?.data?.message || err.message || 'Login failed. Please check your credentials.';
+          set({ loading: false, error: errorMessage });
           throw err;
         }
       },
@@ -44,40 +65,64 @@ const useAuthStore = create(
       register: async (userData) => {
         set({ loading: true, error: null });
         try {
-          console.log('Register request to:', `${API}/auth/register`);
-          const { data } = await axios.post(`${API}/auth/register`, userData);
-          console.log('Register response:', data);
+          console.log('🔍 Register attempt:', userData);
           
-          if (!data.token) {
-            throw new Error('No token received from server');
+          const response = await axios.post(`${API}/auth/register`, userData, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            timeout: 10000
+          });
+          
+          console.log('📊 Register response:', response.status, response.data);
+          
+          if (!response.data || !response.data.success) {
+            throw new Error(response.data?.message || 'Registration failed');
           }
           
-          axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-          localStorage.setItem('token', data.token);
-          set({ user: data.user, token: data.token, loading: false });
-          return data;
+          const token = response.data.token;
+          const user = response.data.user;
+          
+          if (!token || !user) {
+            throw new Error('Invalid response from server');
+          }
+          
+          // Set axios default header for future requests
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          localStorage.setItem('token', token);
+          
+          set({ user, token, loading: false });
+          
+          console.log('✅ Register successful:', { user: user.name, role: user.role });
+          return { success: true, user, token };
+          
         } catch (err) {
-          console.error('Register error details:', {
-            status: err.response?.status,
-            message: err.response?.data?.message,
-            data: err.response?.data,
-            error: err.message
-          });
-          const errorMsg = err.response?.data?.message || err.message || 'Registration failed';
-          set({ loading: false, error: errorMsg });
+          console.error('❌ Register error:', err);
+          const errorMessage = err.response?.data?.message || err.message || 'Registration failed';
+          set({ loading: false, error: errorMessage });
           throw err;
         }
       },
 
       logout: () => {
+        console.log('🔍 Logging out...');
         delete axios.defaults.headers.common['Authorization'];
         localStorage.removeItem('token');
         set({ user: null, token: null });
       },
 
       setUser: (user) => set({ user }),
+
+      clearError: () => set({ error: null }),
     }),
-    { name: 'edusphere-auth', partialize: (state) => ({ user: state.user, token: state.token }) }
+    { 
+      name: 'edusphere-auth', 
+      partialize: (state) => ({ 
+        user: state.user, 
+        token: state.token 
+      }) 
+    }
   )
 );
 

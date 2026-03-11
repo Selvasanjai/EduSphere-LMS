@@ -1,5 +1,5 @@
 const Certificate = require('../models/Certificate');
-const CertificateGenerator = require('../services/certificateGenerator');
+const CertificateGenerator = require('../services/certificateGeneratorSimple');
 
 // GET /api/certificates/:id/download/:format
 exports.downloadCertificate = async (req, res) => {
