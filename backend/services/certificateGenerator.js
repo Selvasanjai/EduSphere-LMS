@@ -12,7 +12,7 @@ class CertificateGenerator {
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'px',
-      format: [this.width, this.height]
+      format: [this.width, this.height],
     });
 
     // Set background
@@ -32,28 +32,49 @@ class CertificateGenerator {
     // Title
     pdf.setFontSize(48);
     pdf.setTextColor(30, 64, 175);
-    pdf.text('Certificate of Completion', this.width / 2, 80, { align: 'center' });
+    pdf.text('Certificate of Completion', this.width / 2, 80, {
+      align: 'center',
+    });
 
     // Student name
     pdf.setFontSize(32);
     pdf.setTextColor(51, 51, 51);
-    pdf.text(certificateData.studentName, this.width / 2, 200, { align: 'center' });
+    pdf.text(certificateData.studentName, this.width / 2, 200, {
+      align: 'center',
+    });
 
     // Course title
     pdf.setFontSize(24);
-    pdf.text(`Course: ${certificateData.courseTitle}`, this.width / 2, 250, { align: 'center' });
+    pdf.text(`Course: ${certificateData.courseTitle}`, this.width / 2, 250, {
+      align: 'center',
+    });
 
     // Category and duration
     pdf.setFontSize(18);
-    pdf.text(`${certificateData.courseCategory} • ${certificateData.duration}`, this.width / 2, 290, { align: 'center' });
+    pdf.text(
+      `${certificateData.courseCategory} • ${certificateData.duration}`,
+      this.width / 2,
+      290,
+      { align: 'center' }
+    );
 
     // Completion date
     pdf.setFontSize(16);
-    pdf.text(`Completed on: ${certificateData.completionDate}`, this.width / 2, 330, { align: 'center' });
+    pdf.text(
+      `Completed on: ${certificateData.completionDate}`,
+      this.width / 2,
+      330,
+      { align: 'center' }
+    );
 
     // Certificate ID
     pdf.setFontSize(14);
-    pdf.text(`Certificate ID: ${certificateData.certificateId}`, this.width / 2, 380, { align: 'center' });
+    pdf.text(
+      `Certificate ID: ${certificateData.certificateId}`,
+      this.width / 2,
+      380,
+      { align: 'center' }
+    );
 
     // Signature lines
     pdf.setDrawColor(102, 102, 102);
@@ -85,7 +106,7 @@ class CertificateGenerator {
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'px',
-      format: [this.width, this.height]
+      format: [this.width, this.height],
     });
 
     // Set background
@@ -105,28 +126,49 @@ class CertificateGenerator {
     // Title
     pdf.setFontSize(48);
     pdf.setTextColor(30, 64, 175);
-    pdf.text('Certificate of Completion', this.width / 2, 80, { align: 'center' });
+    pdf.text('Certificate of Completion', this.width / 2, 80, {
+      align: 'center',
+    });
 
     // Student name
     pdf.setFontSize(32);
     pdf.setTextColor(51, 51, 51);
-    pdf.text(certificateData.studentName, this.width / 2, 200, { align: 'center' });
+    pdf.text(certificateData.studentName, this.width / 2, 200, {
+      align: 'center',
+    });
 
     // Course title
     pdf.setFontSize(24);
-    pdf.text(`Course: ${certificateData.courseTitle}`, this.width / 2, 250, { align: 'center' });
+    pdf.text(`Course: ${certificateData.courseTitle}`, this.width / 2, 250, {
+      align: 'center',
+    });
 
     // Category and duration
     pdf.setFontSize(18);
-    pdf.text(`${certificateData.courseCategory} • ${certificateData.duration}`, this.width / 2, 290, { align: 'center' });
+    pdf.text(
+      `${certificateData.courseCategory} • ${certificateData.duration}`,
+      this.width / 2,
+      290,
+      { align: 'center' }
+    );
 
     // Completion date
     pdf.setFontSize(16);
-    pdf.text(`Completed on: ${certificateData.completionDate}`, this.width / 2, 330, { align: 'center' });
+    pdf.text(
+      `Completed on: ${certificateData.completionDate}`,
+      this.width / 2,
+      330,
+      { align: 'center' }
+    );
 
     // Certificate ID
     pdf.setFontSize(14);
-    pdf.text(`Certificate ID: ${certificateData.certificateId}`, this.width / 2, 380, { align: 'center' });
+    pdf.text(
+      `Certificate ID: ${certificateData.certificateId}`,
+      this.width / 2,
+      380,
+      { align: 'center' }
+    );
 
     // Signature lines
     pdf.setDrawColor(102, 102, 102);

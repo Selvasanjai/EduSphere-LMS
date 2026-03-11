@@ -6,7 +6,7 @@ exports.getAssignmentsByCourse = async (req, res) => {
     const assignments = await Assignment.find({ courseId: req.params.courseId })
       .populate('staffId', 'name email')
       .sort({ createdAt: -1 });
-    
+
     res.json({ success: true, assignments });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -19,14 +19,24 @@ exports.getAssignment = async (req, res) => {
     const assignment = await Assignment.findById(req.params.id)
       .populate('courseId', 'title')
       .populate('staffId', 'name email');
-    
+
     if (!assignment) {
-      return res.status(404).json({ success: false, message: 'Assignment not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Assignment not found.' });
     }
 
     // Staff can only view their own assignments
-    if (req.user?.role === 'staff' && assignment.staffId?.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Not authorized to view this assignment.' });
+    if (
+      req.user?.role === 'staff' &&
+      assignment.staffId?.toString() !== req.user._id.toString()
+    ) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: 'Not authorized to view this assignment.',
+        });
     }
 
     res.json({ success: true, assignment });
@@ -40,7 +50,7 @@ exports.createAssignment = async (req, res) => {
   try {
     const assignmentData = {
       ...req.body,
-      staffId: req.user._id
+      staffId: req.user._id,
     };
 
     const assignment = await Assignment.create(assignmentData);
@@ -57,12 +67,22 @@ exports.updateAssignment = async (req, res) => {
   try {
     const assignment = await Assignment.findById(req.params.id);
     if (!assignment) {
-      return res.status(404).json({ success: false, message: 'Assignment not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Assignment not found.' });
     }
 
     // Staff can only update their own assignments
-    if (req.user?.role === 'staff' && assignment.staffId?.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Not authorized to update this assignment.' });
+    if (
+      req.user?.role === 'staff' &&
+      assignment.staffId?.toString() !== req.user._id.toString()
+    ) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: 'Not authorized to update this assignment.',
+        });
     }
 
     const updatedAssignment = await Assignment.findByIdAndUpdate(
@@ -82,12 +102,22 @@ exports.deleteAssignment = async (req, res) => {
   try {
     const assignment = await Assignment.findById(req.params.id);
     if (!assignment) {
-      return res.status(404).json({ success: false, message: 'Assignment not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Assignment not found.' });
     }
 
     // Staff can only delete their own assignments
-    if (req.user?.role === 'staff' && assignment.staffId?.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Not authorized to delete this assignment.' });
+    if (
+      req.user?.role === 'staff' &&
+      assignment.staffId?.toString() !== req.user._id.toString()
+    ) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: 'Not authorized to delete this assignment.',
+        });
     }
 
     await Assignment.findByIdAndDelete(req.params.id);
@@ -102,18 +132,20 @@ exports.submitAssignment = async (req, res) => {
   try {
     const assignment = await Assignment.findById(req.params.id);
     if (!assignment) {
-      return res.status(404).json({ success: false, message: 'Assignment not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Assignment not found.' });
     }
 
     // Check if already submitted
     const existingSubmission = assignment.submissions.find(
-      sub => sub.studentId.toString() === req.user._id.toString()
+      (sub) => sub.studentId.toString() === req.user._id.toString()
     );
 
     if (existingSubmission) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Assignment already submitted.' 
+      return res.status(400).json({
+        success: false,
+        message: 'Assignment already submitted.',
       });
     }
 
@@ -122,13 +154,13 @@ exports.submitAssignment = async (req, res) => {
       studentId: req.user._id,
       fileUrl: req.body.fileUrl,
       fileName: req.body.fileName,
-      submittedAt: new Date()
+      submittedAt: new Date(),
     });
 
     await assignment.save();
-    res.status(201).json({ 
-      success: true, 
-      message: 'Assignment submitted successfully.' 
+    res.status(201).json({
+      success: true,
+      message: 'Assignment submitted successfully.',
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -140,25 +172,35 @@ exports.reviewAssignment = async (req, res) => {
   try {
     const assignment = await Assignment.findById(req.params.id);
     if (!assignment) {
-      return res.status(404).json({ success: false, message: 'Assignment not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Assignment not found.' });
     }
 
     // Staff can only review their own assignments
-    if (req.user?.role === 'staff' && assignment.staffId?.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Not authorized to review this assignment.' });
+    if (
+      req.user?.role === 'staff' &&
+      assignment.staffId?.toString() !== req.user._id.toString()
+    ) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: 'Not authorized to review this assignment.',
+        });
     }
 
     const { studentId, marks, feedback } = req.body;
-    
+
     // Find and update submission
     const submission = assignment.submissions.find(
-      sub => sub.studentId.toString() === studentId
+      (sub) => sub.studentId.toString() === studentId
     );
 
     if (!submission) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Submission not found.' 
+      return res.status(404).json({
+        success: false,
+        message: 'Submission not found.',
       });
     }
 
@@ -167,9 +209,9 @@ exports.reviewAssignment = async (req, res) => {
     submission.status = 'graded';
 
     await assignment.save();
-    res.json({ 
-      success: true, 
-      message: 'Assignment reviewed successfully.' 
+    res.json({
+      success: true,
+      message: 'Assignment reviewed successfully.',
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

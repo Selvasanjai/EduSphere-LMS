@@ -1,7 +1,6 @@
 const Attendance = require('../models/Attendance');
-const Enrollment = require('../models/Enrollment');
-const User = require('../models/User');
 const Course = require('../models/Course');
+const Enrollment = require('../models/Enrollment');
 
 // Get attendance records for a specific course (staff/admin)
 exports.getCourseAttendance = async (req, res) => {
@@ -11,11 +10,22 @@ exports.getCourseAttendance = async (req, res) => {
 
     // Verify course and permissions
     const course = await Course.findById(courseId);
-    if (!course) return res.status(404).json({ success: false, message: 'Course not found.' });
+    if (!course)
+      return res
+        .status(404)
+        .json({ success: false, message: 'Course not found.' });
 
     // Check if user is staff teaching this course or admin
-    if (req.user.role === 'staff' && course.staffId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Not authorized to view this course attendance.' });
+    if (
+      req.user.role === 'staff' &&
+      course.staffId.toString() !== req.user._id.toString()
+    ) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: 'Not authorized to view this course attendance.',
+        });
     }
 
     let query = { courseId };
@@ -40,16 +50,16 @@ exports.getStudentCourseAttendance = async (req, res) => {
 
     const records = await Attendance.find({ studentId, courseId }).sort('date');
     const total = records.length;
-    const present = records.filter(r => r.status === 'present').length;
-    const partial = records.filter(r => r.status === 'partial').length;
-    const absent = records.filter(r => r.status === 'absent').length;
+    const present = records.filter((r) => r.status === 'present').length;
+    const partial = records.filter((r) => r.status === 'partial').length;
+    const absent = records.filter((r) => r.status === 'absent').length;
 
     const percentage = total > 0 ? ((present / total) * 100).toFixed(1) : 0;
 
     res.json({
       success: true,
       records,
-      summary: { total, present, partial, absent, percentage }
+      summary: { total, present, partial, absent, percentage },
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -63,11 +73,22 @@ exports.markAttendance = async (req, res) => {
     // attendanceData: [{ studentId, date, status, notes }]
 
     const course = await Course.findById(courseId);
-    if (!course) return res.status(404).json({ success: false, message: 'Course not found.' });
+    if (!course)
+      return res
+        .status(404)
+        .json({ success: false, message: 'Course not found.' });
 
     // Check permissions
-    if (req.user.role === 'staff' && course.staffId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Not authorized to mark attendance for this course.' });
+    if (
+      req.user.role === 'staff' &&
+      course.staffId.toString() !== req.user._id.toString()
+    ) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: 'Not authorized to mark attendance for this course.',
+        });
     }
 
     const results = [];
@@ -97,15 +118,26 @@ exports.getCourseStudents = async (req, res) => {
     const { courseId } = req.params;
 
     const course = await Course.findById(courseId);
-    if (!course) return res.status(404).json({ success: false, message: 'Course not found.' });
+    if (!course)
+      return res
+        .status(404)
+        .json({ success: false, message: 'Course not found.' });
 
     // Check permissions
-    if (req.user.role === 'staff' && course.staffId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Not authorized.' });
+    if (
+      req.user.role === 'staff' &&
+      course.staffId.toString() !== req.user._id.toString()
+    ) {
+      return res
+        .status(403)
+        .json({ success: false, message: 'Not authorized.' });
     }
 
-    const enrollments = await Enrollment.find({ courseId }).populate('studentId', 'name email avatar');
-    const students = enrollments.map(e => e.studentId).filter(Boolean);
+    const enrollments = await Enrollment.find({ courseId }).populate(
+      'studentId',
+      'name email avatar'
+    );
+    const students = enrollments.map((e) => e.studentId).filter(Boolean);
 
     res.json({ success: true, count: students.length, students });
   } catch (err) {
@@ -118,11 +150,14 @@ exports.getStudentAttendanceSummary = async (req, res) => {
   try {
     const studentId = req.user._id;
 
-    const records = await Attendance.find({ studentId }).populate('courseId', 'title');
+    const records = await Attendance.find({ studentId }).populate(
+      'courseId',
+      'title'
+    );
 
     // Group by course
     const summary = {};
-    records.forEach(r => {
+    records.forEach((r) => {
       const courseId = r.courseId._id.toString();
       if (!summary[courseId]) {
         summary[courseId] = {
@@ -131,7 +166,7 @@ exports.getStudentAttendanceSummary = async (req, res) => {
           total: 0,
           present: 0,
           partial: 0,
-          absent: 0
+          absent: 0,
         };
       }
       summary[courseId].total++;
@@ -139,9 +174,12 @@ exports.getStudentAttendanceSummary = async (req, res) => {
     });
 
     // Calculate percentages
-    const data = Object.values(summary).map(course => ({
+    const data = Object.values(summary).map((course) => ({
       ...course,
-      percentage: course.total > 0 ? ((course.present / course.total) * 100).toFixed(1) : 0
+      percentage:
+        course.total > 0
+          ? ((course.present / course.total) * 100).toFixed(1)
+          : 0,
     }));
 
     res.json({ success: true, summary: data });
@@ -182,11 +220,19 @@ exports.updateAttendance = async (req, res) => {
     const { status, notes } = req.body;
 
     const record = await Attendance.findById(id);
-    if (!record) return res.status(404).json({ success: false, message: 'Record not found.' });
+    if (!record)
+      return res
+        .status(404)
+        .json({ success: false, message: 'Record not found.' });
 
     const course = await Course.findById(record.courseId);
-    if (req.user.role === 'staff' && course.staffId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Not authorized.' });
+    if (
+      req.user.role === 'staff' &&
+      course.staffId.toString() !== req.user._id.toString()
+    ) {
+      return res
+        .status(403)
+        .json({ success: false, message: 'Not authorized.' });
     }
 
     record.status = status || record.status;

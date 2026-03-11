@@ -1,6 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { getCourses, getCourse, getCourseVideos, createCourse, updateCourse, deleteCourse, approveCourse } = require('../controllers/course.controller');
+const {
+  getCourses,
+  getCourse,
+  getCourseVideos,
+  createCourse,
+  updateCourse,
+  deleteCourse,
+  approveCourse,
+} = require('../controllers/course.controller');
 const { protect, authorize } = require('../middleware/auth.middleware');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
@@ -23,7 +31,7 @@ const optionalAuth = (req, res, next) => {
         next();
       })
       .catch(() => next());
-  } catch (_) {
+  } catch {
     next();
   }
 };

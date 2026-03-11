@@ -1,5 +1,5 @@
 const Certificate = require('../models/Certificate');
-const CertificateGenerator = require('../services/certificateGeneratorSimple');
+const CertificateGenerator = require('../services/certificateGenerator');
 
 // GET /api/certificates/:id/download/:format
 exports.downloadCertificate = async (req, res) => {
@@ -11,7 +11,12 @@ exports.downloadCertificate = async (req, res) => {
       .populate('instructorId', 'name');
 
     if (!certificate || certificate.approvalStatus !== 'approved') {
-      return res.status(404).json({ success: false, message: 'Certificate not found or not approved' });
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: 'Certificate not found or not approved',
+        });
     }
 
     const generator = new CertificateGenerator();
@@ -22,7 +27,7 @@ exports.downloadCertificate = async (req, res) => {
       duration: 'Self-paced',
       completionDate: certificate.completionDate,
       certificateId: certificate.certificateId,
-      instructorName: certificate.instructorId?.name || 'Instructor'
+      instructorName: certificate.instructorId?.name || 'Instructor',
     };
 
     let buffer, mimeType, filename;
@@ -45,7 +50,12 @@ exports.downloadCertificate = async (req, res) => {
         filename = `certificate-${certificate.certificateId}.pdf`;
         break;
       default:
-        return res.status(400).json({ success: false, message: 'Invalid format. Use png, jpg, or pdf' });
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: 'Invalid format. Use png, jpg, or pdf',
+          });
     }
 
     res.setHeader('Content-Type', mimeType);
@@ -66,7 +76,12 @@ exports.previewCertificate = async (req, res) => {
       .populate('instructorId', 'name');
 
     if (!certificate || certificate.approvalStatus !== 'approved') {
-      return res.status(404).json({ success: false, message: 'Certificate not found or not approved' });
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: 'Certificate not found or not approved',
+        });
     }
 
     const generator = new CertificateGenerator();
@@ -77,11 +92,11 @@ exports.previewCertificate = async (req, res) => {
       duration: 'Self-paced',
       completionDate: certificate.completionDate,
       certificateId: certificate.certificateId,
-      instructorName: certificate.instructorId?.name || 'Instructor'
+      instructorName: certificate.instructorId?.name || 'Instructor',
     };
 
     const buffer = await generator.generatePNG(certificateData);
-    
+
     res.setHeader('Content-Type', 'image/png');
     res.send(buffer);
   } catch (err) {

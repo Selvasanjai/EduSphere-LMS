@@ -10,7 +10,7 @@ const {
   startQuizAttempt,
   submitQuizAnswers,
   getQuizResult,
-  getQuizResults
+  getQuizResults,
 } = require('../controllers/quiz.controller');
 
 // Get all quizzes for a course
@@ -32,12 +32,22 @@ router.delete('/:quizId', protect, authorize('staff', 'admin'), deleteQuiz);
 router.post('/:quizId/start', protect, authorize('student'), startQuizAttempt);
 
 // Submit quiz answers
-router.post('/:quizId/submit', protect, authorize('student'), submitQuizAnswers);
+router.post(
+  '/:quizId/submit',
+  protect,
+  authorize('student'),
+  submitQuizAnswers
+);
 
 // Get quiz result (student - own result)
 router.get('/:quizId/result/:studentId', protect, getQuizResult);
 
 // Get all results (staff - all students)
-router.get('/:quizId/results', protect, authorize('staff', 'admin'), getQuizResults);
+router.get(
+  '/:quizId/results',
+  protect,
+  authorize('staff', 'admin'),
+  getQuizResults
+);
 
 module.exports = router;

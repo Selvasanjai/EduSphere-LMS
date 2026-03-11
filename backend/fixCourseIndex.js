@@ -11,7 +11,7 @@ const fixCourseIndex = async () => {
     console.log('✅ Connected to MongoDB');
 
     const db = mongoose.connection.db;
-    
+
     // Drop the problematic index if it exists
     try {
       console.log('🔍 Checking for existing slug index...');
@@ -27,16 +27,17 @@ const fixCourseIndex = async () => {
 
     // Create the correct sparse unique index
     console.log('📝 Creating new sparse unique index on slug...');
-    await db.collection('courses').createIndex(
-      { slug: 1 },
-      { unique: true, sparse: true }
-    );
+    await db
+      .collection('courses')
+      .createIndex({ slug: 1 }, { unique: true, sparse: true });
     console.log('✅ Created new sparse unique index on slug');
 
     // Update all existing courses with null slugs to generate slugs
     const Course = require('./models/Course');
-    const courses = await Course.find({ $or: [{ slug: null }, { slug: { $exists: false } }] });
-    
+    const courses = await Course.find({
+      $or: [{ slug: null }, { slug: { $exists: false } }],
+    });
+
     if (courses.length > 0) {
       console.log(`🔄 Generating slugs for ${courses.length} courses...`);
       for (const course of courses) {

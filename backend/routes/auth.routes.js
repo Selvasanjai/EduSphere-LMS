@@ -1,6 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getMe, forgotPassword, resetPassword, googleAuth, githubAuth } = require('../controllers/auth.controller');
+const {
+  register,
+  login,
+  getMe,
+  forgotPassword,
+  resetPassword,
+  googleAuth,
+  githubAuth,
+} = require('../controllers/auth.controller');
 const { protect } = require('../middleware/auth.middleware');
 
 router.post('/register', register);

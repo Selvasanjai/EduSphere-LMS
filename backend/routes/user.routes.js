@@ -26,7 +26,11 @@ router.patch('/profile', protect, async (req, res) => {
 });
 
 router.patch('/:id/approve', protect, authorize('admin'), async (req, res) => {
-  const user = await User.findByIdAndUpdate(req.params.id, { isApproved: true }, { new: true });
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    { isApproved: true },
+    { new: true }
+  );
   res.json({ success: true, user });
 });
 
