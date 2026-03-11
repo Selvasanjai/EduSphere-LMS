@@ -1,0 +1,28 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[[services]]
+name = "edusphere-backend"
+
+[services.variables]
+NODE_ENV = "production"
+PORT = "5000"
+JWT_SECRET = "your_super_secure_jwt_secret_key_change_this_in_production_make_it_long_and_random_123456789"
+CLIENT_URL = "https://your-vercel-app.vercel.app"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = "587"
+EMAIL_USER = "your_email@gmail.com"
+EMAIL_PASS = "your_app_password"
+MAX_FILE_SIZE = "10485760"
+UPLOAD_PATH = "./uploads"
+RATE_LIMIT_WINDOW_MS = "900000"
+RATE_LIMIT_MAX_REQUESTS = "100"
+
+[env]
+MONGO_URI = "${{MONGO_URI}}"
