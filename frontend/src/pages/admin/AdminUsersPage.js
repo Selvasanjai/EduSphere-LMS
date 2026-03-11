@@ -29,7 +29,7 @@ export default function AdminUsersPage() {
   const handleApprove = async (userId) => {
     try {
       const res = await axios.patch(`/api/users/${userId}/approve`);
-      setUsers(users.map(u => u._id === userId ? res.data.user : u));
+      setUsers(users.map((u) => (u._id === userId ? res.data.user : u)));
       toast.success('Staff approved successfully!');
     } catch (err) {
       toast.error('Failed to approve staff');
@@ -40,16 +40,17 @@ export default function AdminUsersPage() {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
       await axios.delete(`/api/users/${userId}`);
-      setUsers(users.filter(u => u._id !== userId));
+      setUsers(users.filter((u) => u._id !== userId));
       toast.success('User deleted successfully!');
     } catch (err) {
       toast.error('Failed to delete user');
     }
   };
 
-  const filteredUsers = users.filter(u => 
-    (u.name && u.name.toLowerCase().includes(search.toLowerCase())) ||
-    (u.email && u.email.toLowerCase().includes(search.toLowerCase()))
+  const filteredUsers = users.filter(
+    (u) =>
+      (u.name && u.name.toLowerCase().includes(search.toLowerCase())) ||
+      (u.email && u.email.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
@@ -62,7 +63,14 @@ export default function AdminUsersPage() {
       </div>
 
       <div className="card" style={{ marginBottom: 20 }}>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: 10,
+            flexWrap: 'wrap',
+            alignItems: 'center',
+          }}
+        >
           <input
             type="text"
             placeholder="Search by name or email..."
@@ -76,7 +84,7 @@ export default function AdminUsersPage() {
               background: 'var(--bg-secondary)',
               color: 'var(--text)',
               minWidth: 200,
-              fontFamily: 'inherit'
+              fontFamily: 'inherit',
             }}
           />
           <select
@@ -89,7 +97,7 @@ export default function AdminUsersPage() {
               background: 'var(--bg-secondary)',
               color: 'var(--text)',
               fontFamily: 'inherit',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             <option value="all">All Users</option>
@@ -110,58 +118,124 @@ export default function AdminUsersPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid var(--border)' }}>
-                  <th style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}>Name</th>
-                  <th style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}>Email</th>
-                  <th style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}>Role</th>
-                  <th style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}>Department</th>
-                  <th style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}>Status</th>
-                  <th style={{ padding: 12, textAlign: 'center', fontWeight: 600 }}>Actions</th>
+                  <th
+                    style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}
+                  >
+                    Name
+                  </th>
+                  <th
+                    style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}
+                  >
+                    Email
+                  </th>
+                  <th
+                    style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}
+                  >
+                    Role
+                  </th>
+                  <th
+                    style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}
+                  >
+                    Department
+                  </th>
+                  <th
+                    style={{ padding: 12, textAlign: 'left', fontWeight: 600 }}
+                  >
+                    Status
+                  </th>
+                  <th
+                    style={{
+                      padding: 12,
+                      textAlign: 'center',
+                      fontWeight: 600,
+                    }}
+                  >
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map(user => (
-                  <tr key={user._id} style={{ borderBottom: '1px solid var(--border)' }}>
+                {filteredUsers.map((user) => (
+                  <tr
+                    key={user._id}
+                    style={{ borderBottom: '1px solid var(--border)' }}
+                  >
                     <td style={{ padding: 12 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{
-                          width: 40,
-                          height: 40,
-                          borderRadius: '50%',
-                          background: user.avatar ? `url(${user.avatar})` : 'var(--accent-violet)',
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
+                      <div
+                        style={{
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center',
-                          color: 'white',
-                          fontWeight: 600
-                        }}>
-                          {!user.avatar && user.name && user.name.charAt(0).toUpperCase()}
+                          gap: 8,
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: '50%',
+                            background: user.avatar
+                              ? `url(${user.avatar})`
+                              : 'var(--accent-violet)',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'white',
+                            fontWeight: 600,
+                          }}
+                        >
+                          {!user.avatar &&
+                            user.name &&
+                            user.name.charAt(0).toUpperCase()}
                         </div>
                         {user.name}
                       </div>
                     </td>
-                    <td style={{ padding: 12, fontSize: 14, color: 'var(--text-secondary)' }}>{user.email}</td>
+                    <td
+                      style={{
+                        padding: 12,
+                        fontSize: 14,
+                        color: 'var(--text-secondary)',
+                      }}
+                    >
+                      {user.email}
+                    </td>
                     <td style={{ padding: 12 }}>
-                      <span className={`badge badge-${user.role === 'admin' ? 'rose' : user.role === 'staff' ? 'amber' : 'cyan'}`}>
+                      <span
+                        className={`badge badge-${user.role === 'admin' ? 'rose' : user.role === 'staff' ? 'amber' : 'cyan'}`}
+                      >
                         {user.role}
                       </span>
                     </td>
-                    <td style={{ padding: 12, fontSize: 14 }}>{user.department || '—'}</td>
+                    <td style={{ padding: 12, fontSize: 14 }}>
+                      {user.department || '—'}
+                    </td>
                     <td style={{ padding: 12 }}>
                       {user.role === 'staff' && !user.isApproved ? (
-                        <span className="badge badge-red">Pending Approval</span>
+                        <span className="badge badge-red">
+                          Pending Approval
+                        </span>
                       ) : (
                         <span className="badge badge-emerald">Approved</span>
                       )}
                     </td>
                     <td style={{ padding: 12, textAlign: 'center' }}>
-                      <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: 8,
+                          justifyContent: 'center',
+                        }}
+                      >
                         {user.role === 'staff' && !user.isApproved && (
                           <button
                             onClick={() => handleApprove(user._id)}
                             className="btn btn-sm"
-                            style={{ background: 'var(--accent-emerald)', color: 'white' }}
+                            style={{
+                              background: 'var(--accent-emerald)',
+                              color: 'white',
+                            }}
                           >
                             ✓ Approve
                           </button>
@@ -169,7 +243,10 @@ export default function AdminUsersPage() {
                         <button
                           onClick={() => handleDelete(user._id)}
                           className="btn btn-sm"
-                          style={{ background: 'var(--accent-rose)', color: 'white' }}
+                          style={{
+                            background: 'var(--accent-rose)',
+                            color: 'white',
+                          }}
                         >
                           🗑 Delete
                         </button>
@@ -181,7 +258,13 @@ export default function AdminUsersPage() {
             </table>
           </div>
           {filteredUsers.length === 0 && (
-            <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-secondary)' }}>
+            <div
+              style={{
+                textAlign: 'center',
+                padding: 40,
+                color: 'var(--text-secondary)',
+              }}
+            >
               No users found
             </div>
           )}

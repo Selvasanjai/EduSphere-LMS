@@ -8,8 +8,9 @@ export default function VerifyCertPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`/api/certificates/verify/${certId}`)
-      .then(r => setResult({ valid: true, ...r.data }))
+    axios
+      .get(`/api/certificates/verify/${certId}`)
+      .then((r) => setResult({ valid: true, ...r.data }))
       .catch(() => setResult({ valid: false }))
       .finally(() => setLoading(false));
   }, [certId]);
@@ -24,12 +25,20 @@ export default function VerifyCertPage() {
         ) : result?.valid ? (
           <div>
             <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
-            <h2 style={{ color: 'var(--accent-emerald)', marginBottom: 8 }}>Valid Certificate</h2>
+            <h2 style={{ color: 'var(--accent-emerald)', marginBottom: 8 }}>
+              Valid Certificate
+            </h2>
             <p style={{ color: 'var(--text-secondary)', marginBottom: 16 }}>
-              Awarded to <strong style={{ color: 'var(--text-primary)' }}>{result.certificate?.studentId?.name}</strong>
+              Awarded to{' '}
+              <strong style={{ color: 'var(--text-primary)' }}>
+                {result.certificate?.studentId?.name}
+              </strong>
             </p>
             <p style={{ color: 'var(--text-secondary)' }}>
-              Course: <strong style={{ color: 'var(--text-primary)' }}>{result.certificate?.courseId?.title}</strong>
+              Course:{' '}
+              <strong style={{ color: 'var(--text-primary)' }}>
+                {result.certificate?.courseId?.title}
+              </strong>
             </p>
             <div style={{ marginTop: 16 }}>
               <span className="badge badge-emerald">ID: {certId}</span>
@@ -39,7 +48,9 @@ export default function VerifyCertPage() {
           <div>
             <div style={{ fontSize: 48, marginBottom: 16 }}>❌</div>
             <h2 style={{ color: 'var(--accent-rose)' }}>Invalid Certificate</h2>
-            <p style={{ color: 'var(--text-secondary)', marginTop: 8 }}>This certificate could not be verified.</p>
+            <p style={{ color: 'var(--text-secondary)', marginTop: 8 }}>
+              This certificate could not be verified.
+            </p>
           </div>
         )}
       </div>

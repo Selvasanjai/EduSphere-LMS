@@ -11,7 +11,7 @@ export default function StudentAttendancePage() {
     const fetchAttendanceSummary = async () => {
       try {
         const res = await axios.get('/api/attendance/student/summary', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setAttendanceSummary(res.data.summary);
         if (res.data.summary.length > 0) {
@@ -29,9 +29,12 @@ export default function StudentAttendancePage() {
 
   const fetchCourseDetail = async (courseId) => {
     try {
-      const res = await axios.get(`/api/attendance/student/course/${courseId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
+      const res = await axios.get(
+        `/api/attendance/student/course/${courseId}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      );
       setCourseDetail(res.data.records);
     } catch (err) {
       console.error('Error fetching course detail:', err);
@@ -45,10 +48,14 @@ export default function StudentAttendancePage() {
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
-      case 'present': return { bg: '#dcfce7', text: '#166534' };
-      case 'absent': return { bg: '#fee2e2', text: '#991b1b' };
-      case 'partial': return { bg: '#fef3c7', text: '#92400e' };
-      default: return { bg: '#f3f4f6', text: '#374151' };
+      case 'present':
+        return { bg: '#dcfce7', text: '#166534' };
+      case 'absent':
+        return { bg: '#fee2e2', text: '#991b1b' };
+      case 'partial':
+        return { bg: '#fef3c7', text: '#92400e' };
+      default:
+        return { bg: '#f3f4f6', text: '#374151' };
     }
   };
 
@@ -73,7 +80,9 @@ export default function StudentAttendancePage() {
       <div className="page-header">
         <div>
           <h1 className="page-title">📊 My Attendance</h1>
-          <p className="page-subtitle">Track your attendance across all courses</p>
+          <p className="page-subtitle">
+            Track your attendance across all courses
+          </p>
         </div>
       </div>
 
@@ -84,30 +93,60 @@ export default function StudentAttendancePage() {
           </div>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '20px',
+          }}
+        >
           {/* Summary Cards */}
           <div>
             <div style={{ marginBottom: '20px' }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '16px', fontSize: '18px' }}>
+              <h3
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  marginBottom: '16px',
+                  fontSize: '18px',
+                }}
+              >
                 Course Overview
               </h3>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '500px', overflowY: 'auto' }}>
-              {attendanceSummary.map(course => (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                maxHeight: '500px',
+                overflowY: 'auto',
+              }}
+            >
+              {attendanceSummary.map((course) => (
                 <div
                   key={course.courseId}
                   onClick={() => handleCourseSelect(course.courseId)}
                   style={{
                     padding: '16px',
-                    border: selectedCourse === course.courseId ? '2px solid #4f46e5' : '1px solid #e5e7eb',
+                    border:
+                      selectedCourse === course.courseId
+                        ? '2px solid #4f46e5'
+                        : '1px solid #e5e7eb',
                     borderRadius: '8px',
-                    background: selectedCourse === course.courseId ? '#f3f4f6' : 'white',
+                    background:
+                      selectedCourse === course.courseId ? '#f3f4f6' : 'white',
                     cursor: 'pointer',
-                    transition: 'all 0.2s'
+                    transition: 'all 0.2s',
                   }}
                 >
                   <div style={{ marginBottom: '12px' }}>
-                    <h4 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}>
+                    <h4
+                      style={{
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        marginBottom: '4px',
+                      }}
+                    >
                       {course.courseName}
                     </h4>
                     <div style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -115,56 +154,117 @@ export default function StudentAttendancePage() {
                     </div>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '12px' }}>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(3, 1fr)',
+                      gap: '8px',
+                      marginBottom: '12px',
+                    }}
+                  >
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '20px', fontWeight: '700', color: '#10b981' }}>
+                      <div
+                        style={{
+                          fontSize: '20px',
+                          fontWeight: '700',
+                          color: '#10b981',
+                        }}
+                      >
                         {course.present}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#6b7280' }}>Present</div>
+                      <div style={{ fontSize: '11px', color: '#6b7280' }}>
+                        Present
+                      </div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '20px', fontWeight: '700', color: '#f59e0b' }}>
+                      <div
+                        style={{
+                          fontSize: '20px',
+                          fontWeight: '700',
+                          color: '#f59e0b',
+                        }}
+                      >
                         {course.partial}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#6b7280' }}>Partial</div>
+                      <div style={{ fontSize: '11px', color: '#6b7280' }}>
+                        Partial
+                      </div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '20px', fontWeight: '700', color: '#ef4444' }}>
+                      <div
+                        style={{
+                          fontSize: '20px',
+                          fontWeight: '700',
+                          color: '#ef4444',
+                        }}
+                      >
                         {course.absent}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#6b7280' }}>Absent</div>
+                      <div style={{ fontSize: '11px', color: '#6b7280' }}>
+                        Absent
+                      </div>
                     </div>
                   </div>
 
-                  <div style={{
-                    background: '#f3f4f6',
-                    borderRadius: '8px',
-                    height: '8px',
-                    overflow: 'hidden',
-                    marginBottom: '8px'
-                  }}>
+                  <div
+                    style={{
+                      background: '#f3f4f6',
+                      borderRadius: '8px',
+                      height: '8px',
+                      overflow: 'hidden',
+                      marginBottom: '8px',
+                    }}
+                  >
                     <div
                       style={{
                         height: '100%',
                         background: getPercentageColor(course.percentage),
                         width: `${course.percentage}%`,
-                        transition: 'width 0.3s'
+                        transition: 'width 0.3s',
                       }}
                     />
                   </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontSize: '14px', fontWeight: '600', color: getPercentageColor(course.percentage) }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: getPercentageColor(course.percentage),
+                      }}
+                    >
                       {course.percentage}%
                     </div>
-                    <div style={{
-                      fontSize: '12px',
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      background: course.percentage >= 75 ? '#dcfce7' : course.percentage >= 60 ? '#fef3c7' : '#fee2e2',
-                      color: course.percentage >= 75 ? '#166534' : course.percentage >= 60 ? '#92400e' : '#991b1b'
-                    }}>
-                      {course.percentage >= 75 ? '✅ Good' : course.percentage >= 60 ? '⚠️ Warning' : '❌ Critical'}
+                    <div
+                      style={{
+                        fontSize: '12px',
+                        padding: '2px 8px',
+                        borderRadius: '4px',
+                        background:
+                          course.percentage >= 75
+                            ? '#dcfce7'
+                            : course.percentage >= 60
+                              ? '#fef3c7'
+                              : '#fee2e2',
+                        color:
+                          course.percentage >= 75
+                            ? '#166534'
+                            : course.percentage >= 60
+                              ? '#92400e'
+                              : '#991b1b',
+                      }}
+                    >
+                      {course.percentage >= 75
+                        ? '✅ Good'
+                        : course.percentage >= 60
+                          ? '⚠️ Warning'
+                          : '❌ Critical'}
                     </div>
                   </div>
                 </div>
@@ -175,17 +275,38 @@ export default function StudentAttendancePage() {
           {/* Detailed Records */}
           <div>
             <div style={{ marginBottom: '20px' }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '16px', fontSize: '18px' }}>
+              <h3
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  marginBottom: '16px',
+                  fontSize: '18px',
+                }}
+              >
                 Detailed Records
               </h3>
             </div>
-            <div className="card" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+            <div
+              className="card"
+              style={{ maxHeight: '500px', overflowY: 'auto' }}
+            >
               {courseDetail.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '20px', color: '#6b7280' }}>
+                <div
+                  style={{
+                    textAlign: 'center',
+                    padding: '20px',
+                    color: '#6b7280',
+                  }}
+                >
                   📭 No attendance records
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px',
+                  }}
+                >
                   {courseDetail.map((record, index) => {
                     const colors = getStatusBadgeColor(record.status);
                     return (
@@ -196,13 +317,21 @@ export default function StudentAttendancePage() {
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           padding: '12px',
-                          borderBottom: '1px solid #f3f4f6'
+                          borderBottom: '1px solid #f3f4f6',
                         }}
                       >
                         <div>
-                          <div style={{ fontSize: '14px', fontWeight: '500' }}>{record.date}</div>
+                          <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                            {record.date}
+                          </div>
                           {record.notes && (
-                            <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+                            <div
+                              style={{
+                                fontSize: '12px',
+                                color: '#6b7280',
+                                marginTop: '4px',
+                              }}
+                            >
                               📝 {record.notes}
                             </div>
                           )}
@@ -215,10 +344,11 @@ export default function StudentAttendancePage() {
                             color: colors.text,
                             fontSize: '12px',
                             fontWeight: '600',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
                           }}
                         >
-                          {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
+                          {record.status.charAt(0).toUpperCase() +
+                            record.status.slice(1)}
                         </div>
                       </div>
                     );

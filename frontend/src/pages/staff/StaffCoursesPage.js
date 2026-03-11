@@ -33,8 +33,12 @@ export default function StaffCoursesPage() {
     try {
       setLoading(true);
       const { data } = await axios.get(`${API_BASE_URL}/courses`);
-      // Backend already restricts staff to own courses
-      setCourses(data.courses || []);
+      // Filter courses to show only those created by the logged-in staff member
+      const filteredCourses = data.courses.filter(
+        (course) =>
+          course.staffId?._id === user?._id || course.staffId === user?._id
+      );
+      setCourses(filteredCourses || []);
     } catch (error) {
       toast.error('Failed to load courses');
     } finally {
@@ -44,7 +48,7 @@ export default function StaffCoursesPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -58,7 +62,13 @@ export default function StaffCoursesPage() {
       const { data } = await axios.post(`${API_BASE_URL}/courses`, formData);
       toast.success('Course created successfully! Pending admin approval.');
       setShowModal(false);
-      setFormData({ title: '', description: '', category: '', level: 'beginner', duration: '' });
+      setFormData({
+        title: '',
+        description: '',
+        category: '',
+        level: 'beginner',
+        duration: '',
+      });
       fetchCourses();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to save course');
@@ -92,7 +102,13 @@ export default function StaffCoursesPage() {
   const closeModal = () => {
     setShowModal(false);
     setEditingId(null);
-    setFormData({ title: '', description: '', category: '', level: 'beginner', duration: '' });
+    setFormData({
+      title: '',
+      description: '',
+      category: '',
+      level: 'beginner',
+      duration: '',
+    });
   };
 
   return (
@@ -108,43 +124,104 @@ export default function StaffCoursesPage() {
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>
+        <div
+          style={{
+            textAlign: 'center',
+            padding: '40px 0',
+            color: 'var(--text-muted)',
+          }}
+        >
           Loading courses...
         </div>
       ) : courses.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: '60px 40px' }}>
-          <p style={{ fontSize: 18, color: 'var(--text-muted)', marginBottom: 20 }}>No courses yet</p>
-          <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+        <div
+          className="card"
+          style={{ textAlign: 'center', padding: '60px 40px' }}
+        >
+          <p
+            style={{
+              fontSize: 18,
+              color: 'var(--text-muted)',
+              marginBottom: 20,
+            }}
+          >
+            No courses yet
+          </p>
+          <button
+            className="btn btn-primary"
+            onClick={() => setShowModal(true)}
+          >
             <FaPlus /> Create Your First Course
           </button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
-          {courses.map(course => (
-            <div key={course._id} className="card" style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{
-                height: 150,
-                background: `linear-gradient(135deg, hsl(${Math.random() * 360},70%,30%), hsl(${Math.random() * 360},70%,25%))`,
-                borderRadius: '8px 8px 0 0',
-                marginBottom: 16,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 48,
-                color: '#fff'
-              }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: 20,
+          }}
+        >
+          {courses.map((course) => (
+            <div
+              key={course._id}
+              className="card"
+              style={{ display: 'flex', flexDirection: 'column' }}
+            >
+              <div
+                style={{
+                  height: 150,
+                  background: `linear-gradient(135deg, hsl(${Math.random() * 360},70%,30%), hsl(${Math.random() * 360},70%,25%))`,
+                  borderRadius: '8px 8px 0 0',
+                  marginBottom: 16,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 48,
+                  color: '#fff',
+                }}
+              >
                 📚
               </div>
-              <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: 8 }}>{course.title}</h3>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 12, flexGrow: 1 }}>
+              <h3
+                style={{ fontFamily: 'var(--font-display)', marginBottom: 8 }}
+              >
+                {course.title}
+              </h3>
+              <p
+                style={{
+                  fontSize: 13,
+                  color: 'var(--text-muted)',
+                  marginBottom: 12,
+                  flexGrow: 1,
+                }}
+              >
                 {course.description.substring(0, 100)}...
               </p>
-              <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: 8,
+                  marginBottom: 12,
+                  flexWrap: 'wrap',
+                }}
+              >
                 <span className="badge badge-cyan">{course.category}</span>
                 <span className="badge badge-violet">{course.level}</span>
               </div>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>
-                <span>{(course.videos?.length ?? course.totalVideos ?? 0)} videos</span>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: 8,
+                  alignItems: 'center',
+                  fontSize: 12,
+                  color: 'var(--text-muted)',
+                  marginBottom: 16,
+                }}
+              >
+                <span>
+                  {course.videos?.length ?? course.totalVideos ?? 0} videos
+                </span>
                 <span>•</span>
                 <span style={{ textTransform: 'capitalize' }}>
                   {course.isApproved ? '✅ Approved' : '⏳ Pending'}
@@ -154,7 +231,14 @@ export default function StaffCoursesPage() {
                 <button
                   className="btn btn-secondary"
                   onClick={() => navigate(`/staff/videos/${course._id}`)}
-                  style={{ flex: 1, minWidth: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                  style={{
+                    flex: 1,
+                    minWidth: 120,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6,
+                  }}
                   title="Upload and manage course videos"
                 >
                   <FaVideo /> Videos
@@ -162,7 +246,14 @@ export default function StaffCoursesPage() {
                 <button
                   className="btn btn-secondary"
                   onClick={() => handleEdit(course)}
-                  style={{ flex: 1, minWidth: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                  style={{
+                    flex: 1,
+                    minWidth: 100,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6,
+                  }}
                   title="Edit course details"
                 >
                   <FaEdit /> Edit
@@ -170,7 +261,15 @@ export default function StaffCoursesPage() {
                 <button
                   className="btn"
                   onClick={() => handleDelete(course._id)}
-                  style={{ color: 'var(--accent-rose)', flex: 1, minWidth: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                  style={{
+                    color: 'var(--accent-rose)',
+                    flex: 1,
+                    minWidth: 100,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6,
+                  }}
                   title="Delete this course"
                 >
                   <FaTrash /> Delete
@@ -182,24 +281,37 @@ export default function StaffCoursesPage() {
       )}
 
       {showModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-        }}>
-          <div className="card" style={{ maxWidth: 500, width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+          }}
+        >
+          <div
+            className="card"
+            style={{
+              maxWidth: 500,
+              width: '90%',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+            }}
+          >
             <h2 style={{ fontFamily: 'var(--font-display)', marginBottom: 24 }}>
               {editingId ? 'Edit Course' : 'Create Course'}
             </h2>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <form
+              onSubmit={handleSubmit}
+              style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+            >
               <div>
                 <label className="form-label">Course Title *</label>
                 <input
@@ -267,7 +379,11 @@ export default function StaffCoursesPage() {
               </div>
 
               <div style={{ display: 'flex', gap: 12 }}>
-                <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ flex: 1 }}
+                >
                   {editingId ? 'Update Course' : 'Create Course'}
                 </button>
                 <button

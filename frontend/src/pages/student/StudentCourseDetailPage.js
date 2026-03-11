@@ -37,7 +37,9 @@ export default function StudentCourseDetailPage() {
       let nextVideos = normalizeVideos(courseData.course?.videos);
       if (nextVideos.length === 0) {
         try {
-          const { data: videosData } = await axios.get(`/api/courses/${courseId}/videos`);
+          const { data: videosData } = await axios.get(
+            `/api/courses/${courseId}/videos`
+          );
           nextVideos = normalizeVideos(videosData.videos);
         } catch (_) {
           nextVideos = [];
@@ -47,13 +49,17 @@ export default function StudentCourseDetailPage() {
 
       // Fetch progress data
       try {
-        const { data: progressData } = await axios.get(`/api/analytics/student`);
-        const courseProgress = progressData.enrollments?.find(e => e.courseId?._id === courseId);
+        const { data: progressData } = await axios.get(
+          `/api/analytics/student`
+        );
+        const courseProgress = progressData.enrollments?.find(
+          (e) => e.courseId?._id === courseId
+        );
         if (courseProgress) {
           setProgress({
             completed: courseProgress.completed,
             progress: courseProgress.progress,
-            completedVideos: courseProgress.completedVideos || []
+            completedVideos: courseProgress.completedVideos || [],
           });
         }
       } catch (err) {
@@ -76,10 +82,12 @@ export default function StudentCourseDetailPage() {
     setSelectedVideo(video);
     // Track that student is watching
     try {
-      await axios.post(`/api/videos/${video._id}/progress`, {
-        progress: 0,
-        timestamp: new Date().toISOString()
-      }).catch(() => {});
+      await axios
+        .post(`/api/videos/${video._id}/progress`, {
+          progress: 0,
+          timestamp: new Date().toISOString(),
+        })
+        .catch(() => {});
     } catch (err) {
       console.log('Could not track progress');
     }
@@ -87,18 +95,22 @@ export default function StudentCourseDetailPage() {
 
   const handleVideoComplete = async (video) => {
     try {
-      const { data } = await axios.post(`/api/enrollments/course/${courseId}/videos/${video._id}/complete`);
+      const { data } = await axios.post(
+        `/api/enrollments/course/${courseId}/videos/${video._id}/complete`
+      );
       toast.success(`Completed: ${video.title}`);
-      
+
       // Refresh progress
       try {
         const { data } = await axios.get(`/api/analytics/student`);
-        const courseProgress = data.enrollments?.find(e => e.courseId?._id === courseId);
+        const courseProgress = data.enrollments?.find(
+          (e) => e.courseId?._id === courseId
+        );
         if (courseProgress) {
           setProgress({
             completed: courseProgress.completed,
             progress: courseProgress.progress,
-            completedVideos: courseProgress.completedVideos || []
+            completedVideos: courseProgress.completedVideos || [],
           });
         }
       } catch (err) {}
@@ -139,7 +151,7 @@ export default function StudentCourseDetailPage() {
             color: 'var(--accent-cyan)',
             cursor: 'pointer',
             fontSize: 14,
-            marginBottom: 10
+            marginBottom: 10,
           }}
         >
           ← Back to Courses
@@ -149,33 +161,55 @@ export default function StudentCourseDetailPage() {
           <p className="page-subtitle">{course.description}</p>
         </div>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          {progress.progress >= 100 && (
+            <button 
+              className="btn btn-emerald"
+              onClick={() => navigate('/student/certificates')}
+              style={{ padding: '8px 16px', fontSize: 14 }}
+            >
+              🏅 Get Certificate
+            </button>
+          )}
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 24, fontWeight: 'bold', color: 'var(--accent-cyan)' }}>
+            <div
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: 'var(--accent-cyan)',
+              }}
+            >
               {progress.progress || 0}%
             </div>
-            <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Complete</div>
+            <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+              Complete
+            </div>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20 }}>
+      <div
+        style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20 }}
+      >
         {/* Video Player Area */}
         <div className="card">
           {selectedVideo ? (
             <div>
-              <div style={{
-                width: '100%',
-                aspectRatio: '16/9',
-                background: '#000',
-                borderRadius: 8,
-                marginBottom: 20,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                overflow: 'hidden'
-              }}>
-                {selectedVideo.videoUrl?.includes('youtube') || selectedVideo.videoUrl?.includes('youtu.be') ? (
+              <div
+                style={{
+                  width: '100%',
+                  aspectRatio: '16/9',
+                  background: '#000',
+                  borderRadius: 8,
+                  marginBottom: 20,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  overflow: 'hidden',
+                }}
+              >
+                {selectedVideo.videoUrl?.includes('youtube') ||
+                selectedVideo.videoUrl?.includes('youtu.be') ? (
                   <iframe
                     width="100%"
                     height="100%"
@@ -206,24 +240,30 @@ export default function StudentCourseDetailPage() {
               </p>
 
               <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-                <span style={{
-                  padding: '6px 12px',
-                  background: 'var(--accent-violet)20',
-                  color: 'var(--accent-violet)',
-                  borderRadius: 4,
-                  fontSize: 12
-                }}>
-                  {selectedVideo.duration ? `${Math.floor(selectedVideo.duration / 60)}:${String(selectedVideo.duration % 60).padStart(2, '0')}` : 'N/A'}
-                </span>
-                {progress.completedVideos?.includes(selectedVideo._id) && (
-                  <span style={{
+                <span
+                  style={{
                     padding: '6px 12px',
-                    background: 'var(--accent-emerald)20',
-                    color: 'var(--accent-emerald)',
+                    background: 'var(--accent-violet)20',
+                    color: 'var(--accent-violet)',
                     borderRadius: 4,
                     fontSize: 12,
-                    fontWeight: 'bold'
-                  }}>
+                  }}
+                >
+                  {selectedVideo.duration
+                    ? `${Math.floor(selectedVideo.duration / 60)}:${String(selectedVideo.duration % 60).padStart(2, '0')}`
+                    : 'N/A'}
+                </span>
+                {progress.completedVideos?.includes(selectedVideo._id) && (
+                  <span
+                    style={{
+                      padding: '6px 12px',
+                      background: 'var(--accent-emerald)20',
+                      color: 'var(--accent-emerald)',
+                      borderRadius: 4,
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                    }}
+                  >
                     ✓ Completed
                   </span>
                 )}
@@ -241,36 +281,52 @@ export default function StudentCourseDetailPage() {
                     borderRadius: 6,
                     cursor: 'pointer',
                     fontWeight: 600,
-                    marginBottom: 20
+                    marginBottom: 20,
                   }}
                 >
                   Mark as Complete
                 </button>
               )}
 
-              <div style={{
-                padding: 12,
-                background: 'var(--bg-secondary)',
-                borderRadius: 6,
-                marginBottom: 16
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                  <span style={{ fontSize: 12, fontWeight: 600 }}>Course Progress</span>
-                  <span style={{ fontSize: 12, color: 'var(--accent-cyan)' }}>{progress.progress || 0}%</span>
+              <div
+                style={{
+                  padding: 12,
+                  background: 'var(--bg-secondary)',
+                  borderRadius: 6,
+                  marginBottom: 16,
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    marginBottom: 8,
+                  }}
+                >
+                  <span style={{ fontSize: 12, fontWeight: 600 }}>
+                    Course Progress
+                  </span>
+                  <span style={{ fontSize: 12, color: 'var(--accent-cyan)' }}>
+                    {progress.progress || 0}%
+                  </span>
                 </div>
-                <div style={{
-                  width: '100%',
-                  height: 6,
-                  background: 'var(--bg-tertiary)',
-                  borderRadius: 3,
-                  overflow: 'hidden'
-                }}>
-                  <div style={{
-                    width: `${progress.progress || 0}%`,
-                    height: '100%',
-                    background: 'var(--accent-cyan)',
-                    transition: 'width 0.3s ease'
-                  }} />
+                <div
+                  style={{
+                    width: '100%',
+                    height: 6,
+                    background: 'var(--bg-tertiary)',
+                    borderRadius: 3,
+                    overflow: 'hidden',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${progress.progress || 0}%`,
+                      height: '100%',
+                      background: 'var(--accent-cyan)',
+                      transition: 'width 0.3s ease',
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -284,15 +340,25 @@ export default function StudentCourseDetailPage() {
         {/* Videos Sidebar */}
         <div>
           <div style={{ marginBottom: 16 }}>
-            <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: 12, fontSize: 14 }}>
+            <h3
+              style={{
+                fontFamily: 'var(--font-display)',
+                marginBottom: 12,
+                fontSize: 14,
+              }}
+            >
               Course Videos ({videos.length})
             </h3>
-            <div style={{
-              maxHeight: 'calc(100vh - 200px)',
-              overflowY: 'auto'
-            }}>
+            <div
+              style={{
+                maxHeight: 'calc(100vh - 200px)',
+                overflowY: 'auto',
+              }}
+            >
               {videos.map((video, idx) => {
-                const isCompleted = progress.completedVideos?.includes(video._id);
+                const isCompleted = progress.completedVideos?.includes(
+                  video._id
+                );
                 const isActive = selectedVideo?._id === video._id;
                 return (
                   <button
@@ -302,42 +368,66 @@ export default function StudentCourseDetailPage() {
                       width: '100%',
                       padding: 12,
                       marginBottom: 8,
-                      border: isActive ? '2px solid var(--accent-cyan)' : '1px solid var(--border)',
-                      background: isActive ? 'var(--accent-cyan)20' : 'var(--bg-secondary)',
+                      border: isActive
+                        ? '2px solid var(--accent-cyan)'
+                        : '1px solid var(--border)',
+                      background: isActive
+                        ? 'var(--accent-cyan)20'
+                        : 'var(--bg-secondary)',
                       borderRadius: 6,
                       cursor: 'pointer',
                       textAlign: 'left',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.2s ease',
                     }}
                   >
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-                      <span style={{
-                        fontWeight: 600,
-                        color: 'var(--text-secondary)',
-                        minWidth: 24
-                      }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 8,
+                        alignItems: 'flex-start',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontWeight: 600,
+                          color: 'var(--text-secondary)',
+                          minWidth: 24,
+                        }}
+                      >
                         {idx + 1}
                       </span>
                       <div style={{ flex: 1 }}>
-                        <div style={{
-                          fontSize: 13,
-                          fontWeight: 500,
-                          marginBottom: 4,
-                          color: isActive ? 'var(--accent-cyan)' : 'var(--text)'
-                        }}>
+                        <div
+                          style={{
+                            fontSize: 13,
+                            fontWeight: 500,
+                            marginBottom: 4,
+                            color: isActive
+                              ? 'var(--accent-cyan)'
+                              : 'var(--text)',
+                          }}
+                        >
                           {video.title}
                         </div>
-                        <div style={{
-                          fontSize: 11,
-                          color: 'var(--text-secondary)',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center'
-                        }}>
+                        <div
+                          style={{
+                            fontSize: 11,
+                            color: 'var(--text-secondary)',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                          }}
+                        >
                           <span>
-                            {video.duration ? `${Math.floor(video.duration / 60)}m` : 'N/A'}
+                            {video.duration
+                              ? `${Math.floor(video.duration / 60)}m`
+                              : 'N/A'}
                           </span>
-                          {isCompleted && <span style={{ color: 'var(--accent-emerald)' }}>✓</span>}
+                          {isCompleted && (
+                            <span style={{ color: 'var(--accent-emerald)' }}>
+                              ✓
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>

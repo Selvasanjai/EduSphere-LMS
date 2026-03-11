@@ -19,7 +19,7 @@ export default function StudentProfilePage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -49,31 +49,53 @@ export default function StudentProfilePage() {
       </div>
 
       <div className="card" style={{ maxWidth: '600px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 30 }}>
-          <div style={{
-            width: 80,
-            height: 80,
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--accent-cyan), var(--accent-violet))',
+        <div
+          style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 800,
-            fontSize: 32,
-            color: '#0a0f1e'
-          }}>
+            gap: 20,
+            marginBottom: 30,
+          }}
+        >
+          <div
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: '50%',
+              background:
+                'linear-gradient(135deg, var(--accent-cyan), var(--accent-violet))',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 800,
+              fontSize: 32,
+              color: '#0a0f1e',
+            }}
+          >
             {user?.name?.[0]?.toUpperCase()}
           </div>
           <div>
-            <h2 style={{ margin: 0, fontFamily: 'var(--font-display)' }}>{user?.name}</h2>
-            <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', textTransform: 'capitalize' }}>
-              {user?.role} • Joined {new Date(user?.createdAt).toLocaleDateString()}
+            <h2 style={{ margin: 0, fontFamily: 'var(--font-display)' }}>
+              {user?.name}
+            </h2>
+            <p
+              style={{
+                margin: '4px 0 0',
+                color: 'var(--text-muted)',
+                textTransform: 'capitalize',
+              }}
+            >
+              {user?.role} • Joined{' '}
+              {new Date(user?.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
 
         {isEditing ? (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+          >
             <div>
               <label className="form-label">Name</label>
               <input
@@ -97,7 +119,15 @@ export default function StudentProfilePage() {
                 disabled
                 style={{ opacity: 0.6 }}
               />
-              <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>Email cannot be changed</p>
+              <p
+                style={{
+                  fontSize: 12,
+                  color: 'var(--text-muted)',
+                  marginTop: 4,
+                }}
+              >
+                Email cannot be changed
+              </p>
             </div>
 
             <div>
@@ -125,7 +155,11 @@ export default function StudentProfilePage() {
             </div>
 
             <div style={{ display: 'flex', gap: 12 }}>
-              <button type="submit" className="btn btn-primary" disabled={loading}>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading}
+              >
                 {loading ? 'Saving...' : 'Save Changes'}
               </button>
               <button
@@ -148,25 +182,86 @@ export default function StudentProfilePage() {
           </form>
         ) : (
           <>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: 16,
+                marginBottom: 24,
+              }}
+            >
               <div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Email</div>
-                <div style={{ fontSize: 14, fontWeight: 500 }}>{user?.email}</div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    marginBottom: 6,
+                  }}
+                >
+                  Email
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 500 }}>
+                  {user?.email}
+                </div>
               </div>
 
               <div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Role</div>
-                <div style={{ fontSize: 14, fontWeight: 500, textTransform: 'capitalize' }}>{user?.role}</div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    marginBottom: 6,
+                  }}
+                >
+                  Role
+                </div>
+                <div
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 500,
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {user?.role}
+                </div>
               </div>
 
               <div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Department</div>
-                <div style={{ fontSize: 14, fontWeight: 500 }}>{user?.department || 'Not specified'}</div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    marginBottom: 6,
+                  }}
+                >
+                  Department
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 500 }}>
+                  {user?.department || 'Not specified'}
+                </div>
               </div>
 
               <div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>College</div>
-                <div style={{ fontSize: 14, fontWeight: 500 }}>{user?.college || 'Not specified'}</div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    marginBottom: 6,
+                  }}
+                >
+                  College
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 500 }}>
+                  {user?.college || 'Not specified'}
+                </div>
               </div>
             </div>
 

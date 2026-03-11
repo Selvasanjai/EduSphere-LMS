@@ -7,14 +7,14 @@ export default function AdminAttendancePage() {
   const [filters, setFilters] = useState({
     date: '',
     status: '',
-    courseId: ''
+    courseId: '',
   });
   const [courses, setCourses] = useState([]);
   const [stats, setStats] = useState({
     totalRecords: 0,
     present: 0,
     absent: 0,
-    partial: 0
+    partial: 0,
   });
 
   useEffect(() => {
@@ -31,16 +31,16 @@ export default function AdminAttendancePage() {
       if (filters.courseId) params.append('courseId', filters.courseId);
 
       const res = await axios.get(`/api/attendance/admin/report?${params}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setRecords(res.data.records);
 
       // Calculate stats
       const stats = {
         totalRecords: res.data.records.length,
-        present: res.data.records.filter(r => r.status === 'present').length,
-        absent: res.data.records.filter(r => r.status === 'absent').length,
-        partial: res.data.records.filter(r => r.status === 'partial').length
+        present: res.data.records.filter((r) => r.status === 'present').length,
+        absent: res.data.records.filter((r) => r.status === 'absent').length,
+        partial: res.data.records.filter((r) => r.status === 'partial').length,
       };
       setStats(stats);
     } catch (err) {
@@ -60,9 +60,9 @@ export default function AdminAttendancePage() {
   };
 
   const handleFilterChange = (field, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -75,16 +75,18 @@ export default function AdminAttendancePage() {
     const headers = ['Date', 'Student', 'Email', 'Course', 'Status', 'Notes'];
     const csv = [
       headers.join(','),
-      ...records.map(r =>
+      ...records.map((r) =>
         [
           r.date,
           r.studentId?.name || 'N/A',
           r.studentId?.email || 'N/A',
           r.courseId?.title || 'N/A',
           r.status,
-          r.notes || ''
-        ].map(field => `"${field}"`).join(',')
-      )
+          r.notes || '',
+        ]
+          .map((field) => `"${field}"`)
+          .join(',')
+      ),
     ].join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -97,10 +99,14 @@ export default function AdminAttendancePage() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'present': return { bg: '#dcfce7', text: '#166534' };
-      case 'absent': return { bg: '#fee2e2', text: '#991b1b' };
-      case 'partial': return { bg: '#fef3c7', text: '#92400e' };
-      default: return { bg: '#f3f4f6', text: '#374151' };
+      case 'present':
+        return { bg: '#dcfce7', text: '#166534' };
+      case 'absent':
+        return { bg: '#fee2e2', text: '#991b1b' };
+      case 'partial':
+        return { bg: '#fef3c7', text: '#92400e' };
+      default:
+        return { bg: '#f3f4f6', text: '#374151' };
     }
   };
 
@@ -109,7 +115,9 @@ export default function AdminAttendancePage() {
       <div className="page-header">
         <div>
           <h1 className="page-title">📊 Attendance Reports</h1>
-          <p className="page-subtitle">View and manage all attendance records</p>
+          <p className="page-subtitle">
+            View and manage all attendance records
+          </p>
         </div>
         <button
           onClick={exportToCSV}
@@ -121,7 +129,7 @@ export default function AdminAttendancePage() {
             borderRadius: '6px',
             cursor: 'pointer',
             fontSize: '14px',
-            fontWeight: '600'
+            fontWeight: '600',
           }}
         >
           📥 Export CSV
@@ -132,22 +140,30 @@ export default function AdminAttendancePage() {
       <div className="stats-grid" style={{ marginBottom: '24px' }}>
         <div className="stat-card">
           <div className="icon">📋</div>
-          <div className="value" style={{ color: '#4f46e5' }}>{stats.totalRecords}</div>
+          <div className="value" style={{ color: '#4f46e5' }}>
+            {stats.totalRecords}
+          </div>
           <div className="label">Total Records</div>
         </div>
         <div className="stat-card">
           <div className="icon">✅</div>
-          <div className="value" style={{ color: '#10b981' }}>{stats.present}</div>
+          <div className="value" style={{ color: '#10b981' }}>
+            {stats.present}
+          </div>
           <div className="label">Present</div>
         </div>
         <div className="stat-card">
           <div className="icon">⚠️</div>
-          <div className="value" style={{ color: '#f59e0b' }}>{stats.partial}</div>
+          <div className="value" style={{ color: '#f59e0b' }}>
+            {stats.partial}
+          </div>
           <div className="label">Partial</div>
         </div>
         <div className="stat-card">
           <div className="icon">❌</div>
-          <div className="value" style={{ color: '#ef4444' }}>{stats.absent}</div>
+          <div className="value" style={{ color: '#ef4444' }}>
+            {stats.absent}
+          </div>
           <div className="label">Absent</div>
         </div>
       </div>
@@ -155,11 +171,26 @@ export default function AdminAttendancePage() {
       {/* Filters */}
       <div className="card" style={{ marginBottom: '24px' }}>
         <div style={{ marginBottom: '16px' }}>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '16px' }}>Filters</h3>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '16px' }}>
+            Filters
+          </h3>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '16px',
+          }}
+        >
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>
+            <label
+              style={{
+                display: 'block',
+                marginBottom: '8px',
+                fontSize: '14px',
+                fontWeight: '500',
+              }}
+            >
               By Date
             </label>
             <input
@@ -172,12 +203,19 @@ export default function AdminAttendancePage() {
                 border: '1px solid #e5e7eb',
                 borderRadius: '6px',
                 fontSize: '14px',
-                fontFamily: 'inherit'
+                fontFamily: 'inherit',
               }}
             />
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>
+            <label
+              style={{
+                display: 'block',
+                marginBottom: '8px',
+                fontSize: '14px',
+                fontWeight: '500',
+              }}
+            >
               By Status
             </label>
             <select
@@ -189,7 +227,7 @@ export default function AdminAttendancePage() {
                 border: '1px solid #e5e7eb',
                 borderRadius: '6px',
                 fontSize: '14px',
-                fontFamily: 'inherit'
+                fontFamily: 'inherit',
               }}
             >
               <option value="">All Status</option>
@@ -199,7 +237,14 @@ export default function AdminAttendancePage() {
             </select>
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>
+            <label
+              style={{
+                display: 'block',
+                marginBottom: '8px',
+                fontSize: '14px',
+                fontWeight: '500',
+              }}
+            >
               By Course
             </label>
             <select
@@ -211,11 +256,11 @@ export default function AdminAttendancePage() {
                 border: '1px solid #e5e7eb',
                 borderRadius: '6px',
                 fontSize: '14px',
-                fontFamily: 'inherit'
+                fontFamily: 'inherit',
               }}
             >
               <option value="">All Courses</option>
-              {courses.map(course => (
+              {courses.map((course) => (
                 <option key={course._id} value={course._id}>
                   {course.title}
                 </option>
@@ -223,7 +268,14 @@ export default function AdminAttendancePage() {
             </select>
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>
+            <label
+              style={{
+                display: 'block',
+                marginBottom: '8px',
+                fontSize: '14px',
+                fontWeight: '500',
+              }}
+            >
               &nbsp;
             </label>
             <button
@@ -236,7 +288,7 @@ export default function AdminAttendancePage() {
                 borderRadius: '6px',
                 fontSize: '14px',
                 fontFamily: 'inherit',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               Clear Filters
@@ -252,24 +304,81 @@ export default function AdminAttendancePage() {
             <div>⏳ Loading records...</div>
           </div>
         ) : records.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>
+          <div
+            style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}
+          >
             📭 No attendance records found
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
-            <table style={{
-              width: '100%',
-              borderCollapse: 'collapse',
-              fontSize: '14px'
-            }}>
+            <table
+              style={{
+                width: '100%',
+                borderCollapse: 'collapse',
+                fontSize: '14px',
+              }}
+            >
               <thead>
-                <tr style={{ background: '#f9fafb', borderBottom: '2px solid #e5e7eb' }}>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600' }}>Date</th>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600' }}>Student</th>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600' }}>Email</th>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600' }}>Course</th>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600' }}>Status</th>
-                  <th style={{ padding: '12px', textAlign: 'left', fontWeight: '600' }}>Notes</th>
+                <tr
+                  style={{
+                    background: '#f9fafb',
+                    borderBottom: '2px solid #e5e7eb',
+                  }}
+                >
+                  <th
+                    style={{
+                      padding: '12px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                    }}
+                  >
+                    Date
+                  </th>
+                  <th
+                    style={{
+                      padding: '12px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                    }}
+                  >
+                    Student
+                  </th>
+                  <th
+                    style={{
+                      padding: '12px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                    }}
+                  >
+                    Email
+                  </th>
+                  <th
+                    style={{
+                      padding: '12px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                    }}
+                  >
+                    Course
+                  </th>
+                  <th
+                    style={{
+                      padding: '12px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                    }}
+                  >
+                    Status
+                  </th>
+                  <th
+                    style={{
+                      padding: '12px',
+                      textAlign: 'left',
+                      fontWeight: '600',
+                    }}
+                  >
+                    Notes
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -280,14 +389,26 @@ export default function AdminAttendancePage() {
                       key={index}
                       style={{
                         borderBottom: '1px solid #e5e7eb',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = '#f9fafb'}
-                      onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background = '#f9fafb')
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.background = 'transparent')
+                      }
                     >
                       <td style={{ padding: '12px' }}>{record.date}</td>
-                      <td style={{ padding: '12px' }}>{record.studentId?.name || 'N/A'}</td>
-                      <td style={{ padding: '12px', fontSize: '12px', color: '#6b7280' }}>
+                      <td style={{ padding: '12px' }}>
+                        {record.studentId?.name || 'N/A'}
+                      </td>
+                      <td
+                        style={{
+                          padding: '12px',
+                          fontSize: '12px',
+                          color: '#6b7280',
+                        }}
+                      >
                         {record.studentId?.email || 'N/A'}
                       </td>
                       <td style={{ padding: '12px', fontSize: '13px' }}>
@@ -301,13 +422,20 @@ export default function AdminAttendancePage() {
                             background: colors.bg,
                             color: colors.text,
                             fontWeight: '600',
-                            fontSize: '12px'
+                            fontSize: '12px',
                           }}
                         >
-                          {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
+                          {record.status.charAt(0).toUpperCase() +
+                            record.status.slice(1)}
                         </span>
                       </td>
-                      <td style={{ padding: '12px', color: '#6b7280', fontSize: '12px' }}>
+                      <td
+                        style={{
+                          padding: '12px',
+                          color: '#6b7280',
+                          fontSize: '12px',
+                        }}
+                      >
                         {record.notes || '—'}
                       </td>
                     </tr>

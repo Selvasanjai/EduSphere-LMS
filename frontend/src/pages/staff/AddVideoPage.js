@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { FaPlus, FaTrash, FaArrowUp, FaArrowDown, FaEdit, FaTimes } from 'react-icons/fa';
+import {
+  FaPlus,
+  FaTrash,
+  FaArrowUp,
+  FaArrowDown,
+  FaEdit,
+  FaTimes,
+} from 'react-icons/fa';
 import API_BASE_URL from '../../api';
 
 export default function AddVideoPage() {
@@ -25,7 +32,7 @@ export default function AddVideoPage() {
     title: '',
     url: '',
     duration: '',
-    order: 1
+    order: 1,
   });
 
   useEffect(() => {
@@ -50,7 +57,10 @@ export default function AddVideoPage() {
         duration: data.course.duration || '',
       });
       if (data.course.videos) {
-        setFormData(prev => ({ ...prev, order: data.course.videos.length + 1 }));
+        setFormData((prev) => ({
+          ...prev,
+          order: data.course.videos.length + 1,
+        }));
       }
     } catch (error) {
       toast.error('Failed to load course');
@@ -62,17 +72,21 @@ export default function AddVideoPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleChangeCourse = (e) => {
     const { name, value } = e.target;
-    setCourseFormData(prev => ({ ...prev, [name]: value }));
+    setCourseFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSaveCourse = async (e) => {
     e.preventDefault();
-    if (!courseFormData.title || !courseFormData.description || !courseFormData.category) {
+    if (
+      !courseFormData.title ||
+      !courseFormData.description ||
+      !courseFormData.category
+    ) {
       toast.error('Please fill all required fields');
       return;
     }
@@ -84,9 +98,9 @@ export default function AddVideoPage() {
         description: courseFormData.description,
         category: courseFormData.category,
         level: courseFormData.level,
-        duration: courseFormData.duration
+        duration: courseFormData.duration,
       };
-      
+
       await axios.patch(`${API_BASE_URL}/courses/${courseId}`, updateData);
       toast.success('Course details updated successfully!');
       setShowEditCourse(false);
@@ -109,20 +123,25 @@ export default function AddVideoPage() {
       const videoData = {
         ...formData,
         duration: parseInt(formData.duration),
-        order: parseInt(formData.order)
+        order: parseInt(formData.order),
       };
 
       // Add video to course
       const courseRes = await axios.get(`${API_BASE_URL}/courses/${courseId}`);
       const currentCourse = courseRes.data.course;
       const currentVideos = currentCourse.videos || [];
-      
+
       await axios.patch(`${API_BASE_URL}/courses/${courseId}`, {
-        videos: [...currentVideos, videoData]
+        videos: [...currentVideos, videoData],
       });
 
       toast.success('Video added successfully!');
-      setFormData({ title: '', url: '', duration: '', order: currentVideos.length + 2 });
+      setFormData({
+        title: '',
+        url: '',
+        duration: '',
+        order: currentVideos.length + 2,
+      });
       setShowForm(false);
       fetchCourse();
     } catch (error) {
@@ -137,7 +156,9 @@ export default function AddVideoPage() {
       const currentCourse = courseRes.data.course;
       const currentVideos = currentCourse.videos || [];
       const updatedVideos = currentVideos.filter((_, i) => i !== videoIndex);
-      await axios.patch(`${API_BASE_URL}/courses/${courseId}`, { videos: updatedVideos });
+      await axios.patch(`${API_BASE_URL}/courses/${courseId}`, {
+        videos: updatedVideos,
+      });
       toast.success('Video deleted successfully!');
       fetchCourse();
     } catch (error) {
@@ -151,9 +172,14 @@ export default function AddVideoPage() {
     const currentCourse = courseRes.data.course;
     const currentVideos = currentCourse.videos || [];
     const newVideos = [...currentVideos];
-    [newVideos[fromIndex], newVideos[toIndex]] = [newVideos[toIndex], newVideos[fromIndex]];
+    [newVideos[fromIndex], newVideos[toIndex]] = [
+      newVideos[toIndex],
+      newVideos[fromIndex],
+    ];
     try {
-      await axios.patch(`${API_BASE_URL}/courses/${courseId}`, { videos: newVideos });
+      await axios.patch(`${API_BASE_URL}/courses/${courseId}`, {
+        videos: newVideos,
+      });
       fetchCourse();
     } catch (error) {
       toast.error('Failed to reorder videos');
@@ -172,10 +198,16 @@ export default function AddVideoPage() {
           <p className="page-subtitle">{course?.title}</p>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn btn-secondary" onClick={() => setShowEditCourse(true)}>
+          <button
+            className="btn btn-secondary"
+            onClick={() => setShowEditCourse(true)}
+          >
             <FaEdit /> Edit Course
           </button>
-          <button className="btn btn-primary" onClick={() => setShowForm(!showForm)}>
+          <button
+            className="btn btn-primary"
+            onClick={() => setShowForm(!showForm)}
+          >
             <FaPlus /> Add Video
           </button>
         </div>
@@ -183,11 +215,28 @@ export default function AddVideoPage() {
 
       {showForm && (
         <div className="card" style={{ marginBottom: 20 }}>
-          <h3 style={{ marginBottom: 16, fontFamily: 'var(--font-display)' }}>Add New Video</h3>
+          <h3 style={{ marginBottom: 16, fontFamily: 'var(--font-display)' }}>
+            Add New Video
+          </h3>
           <form onSubmit={handleAddVideo} style={{ display: 'grid', gap: 14 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: 14,
+              }}
+            >
               <div>
-                <label style={{ display: 'block', marginBottom: 6, fontWeight: 500, fontSize: 14 }}>Video Title *</label>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: 6,
+                    fontWeight: 500,
+                    fontSize: 14,
+                  }}
+                >
+                  Video Title *
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -201,12 +250,21 @@ export default function AddVideoPage() {
                     border: '1px solid var(--border)',
                     background: 'var(--bg-secondary)',
                     color: 'var(--text)',
-                    fontFamily: 'inherit'
+                    fontFamily: 'inherit',
                   }}
                 />
               </div>
               <div>
-                <label style={{ display: 'block', marginBottom: 6, fontWeight: 500, fontSize: 14 }}>Duration (seconds) *</label>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: 6,
+                    fontWeight: 500,
+                    fontSize: 14,
+                  }}
+                >
+                  Duration (seconds) *
+                </label>
                 <input
                   type="number"
                   name="duration"
@@ -220,14 +278,23 @@ export default function AddVideoPage() {
                     border: '1px solid var(--border)',
                     background: 'var(--bg-secondary)',
                     color: 'var(--text)',
-                    fontFamily: 'inherit'
+                    fontFamily: 'inherit',
                   }}
                 />
               </div>
             </div>
 
             <div>
-              <label style={{ display: 'block', marginBottom: 6, fontWeight: 500, fontSize: 14 }}>Video URL *</label>
+              <label
+                style={{
+                  display: 'block',
+                  marginBottom: 6,
+                  fontWeight: 500,
+                  fontSize: 14,
+                }}
+              >
+                Video URL *
+              </label>
               <input
                 type="url"
                 name="url"
@@ -241,13 +308,21 @@ export default function AddVideoPage() {
                   border: '1px solid var(--border)',
                   background: 'var(--bg-secondary)',
                   color: 'var(--text)',
-                  fontFamily: 'inherit'
+                  fontFamily: 'inherit',
                 }}
               />
-              <p style={{ margin: '4px 0 0 0', fontSize: 12, color: 'var(--text-muted)' }}>
-                💡 Use direct video URLs (MP4, WebM). YouTube may have connection issues.
+              <p
+                style={{
+                  margin: '4px 0 0 0',
+                  fontSize: 12,
+                  color: 'var(--text-muted)',
+                }}
+              >
+                💡 Use direct video URLs (MP4, WebM). YouTube may have
+                connection issues.
                 <br />
-                <strong>Working examples:</strong> W3Schools videos, sample-videos.com
+                <strong>Working examples:</strong> W3Schools videos,
+                sample-videos.com
               </p>
             </div>
 
@@ -255,7 +330,11 @@ export default function AddVideoPage() {
               <button type="submit" className="btn btn-primary">
                 ✓ Add Video
               </button>
-              <button type="button" className="btn btn-secondary" onClick={() => setShowForm(false)}>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setShowForm(false)}
+              >
                 Cancel
               </button>
             </div>
@@ -268,7 +347,13 @@ export default function AddVideoPage() {
           Course Videos ({videos.length})
         </h3>
         {videos.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-secondary)' }}>
+          <div
+            style={{
+              textAlign: 'center',
+              padding: 40,
+              color: 'var(--text-secondary)',
+            }}
+          >
             No videos added yet
           </div>
         ) : (
@@ -283,7 +368,7 @@ export default function AddVideoPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  gap: 12
+                  gap: 12,
                 }}
               >
                 <div style={{ flex: 1 }}>
@@ -291,7 +376,9 @@ export default function AddVideoPage() {
                     {index + 1}. {video.title}
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-                    ⏱️ {Math.floor(video.duration / 60)}:{(video.duration % 60).toString().padStart(2, '0')} •🔗 {video.url.substring(0, 30)}...
+                    ⏱️ {Math.floor(video.duration / 60)}:
+                    {(video.duration % 60).toString().padStart(2, '0')} •🔗{' '}
+                    {video.url.substring(0, 30)}...
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: 8 }}>
@@ -299,7 +386,10 @@ export default function AddVideoPage() {
                     onClick={() => handleReorderVideo(index, index - 1)}
                     disabled={index === 0}
                     className="btn"
-                    style={{ padding: '8px 10px', opacity: index === 0 ? 0.5 : 1 }}
+                    style={{
+                      padding: '8px 10px',
+                      opacity: index === 0 ? 0.5 : 1,
+                    }}
                   >
                     <FaArrowUp />
                   </button>
@@ -307,7 +397,10 @@ export default function AddVideoPage() {
                     onClick={() => handleReorderVideo(index, index + 1)}
                     disabled={index === videos.length - 1}
                     className="btn"
-                    style={{ padding: '8px 10px', opacity: index === videos.length - 1 ? 0.5 : 1 }}
+                    style={{
+                      padding: '8px 10px',
+                      opacity: index === videos.length - 1 ? 0.5 : 1,
+                    }}
                   >
                     <FaArrowDown />
                   </button>
@@ -326,19 +419,30 @@ export default function AddVideoPage() {
       </div>
 
       {showEditCourse && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-        }}>
-          <div className="card" style={{ maxWidth: 500, width: '90%', maxHeight: '90vh', overflowY: 'auto', position: 'relative' }}>
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+          }}
+        >
+          <div
+            className="card"
+            style={{
+              maxWidth: 500,
+              width: '90%',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              position: 'relative',
+            }}
+          >
             <button
               onClick={() => setShowEditCourse(false)}
               style={{
@@ -350,15 +454,20 @@ export default function AddVideoPage() {
                 color: 'var(--text-secondary)',
                 cursor: 'pointer',
                 fontSize: 20,
-                padding: 0
+                padding: 0,
               }}
             >
               <FaTimes />
             </button>
 
-            <h2 style={{ fontFamily: 'var(--font-display)', marginBottom: 24 }}>Edit Course Details</h2>
+            <h2 style={{ fontFamily: 'var(--font-display)', marginBottom: 24 }}>
+              Edit Course Details
+            </h2>
 
-            <form onSubmit={handleSaveCourse} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <form
+              onSubmit={handleSaveCourse}
+              style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+            >
               <div>
                 <label className="form-label">Course Title *</label>
                 <input
@@ -399,7 +508,13 @@ export default function AddVideoPage() {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: 16,
+                }}
+              >
                 <div>
                   <label className="form-label">Level</label>
                   <select
@@ -428,12 +543,17 @@ export default function AddVideoPage() {
               </div>
 
               <div style={{ display: 'flex', gap: 10 }}>
-                <button type="submit" className="btn btn-primary" disabled={editingCourse} style={{ flex: 1 }}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={editingCourse}
+                  style={{ flex: 1 }}
+                >
                   {editingCourse ? 'Saving...' : '✓ Save Changes'}
                 </button>
-                <button 
-                  type="button" 
-                  className="btn btn-secondary" 
+                <button
+                  type="button"
+                  className="btn btn-secondary"
                   onClick={() => setShowEditCourse(false)}
                   style={{ flex: 1 }}
                 >

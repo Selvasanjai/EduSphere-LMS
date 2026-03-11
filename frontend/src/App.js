@@ -21,7 +21,8 @@ import VerifyCertPage from './pages/VerifyCertPage';
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, token } = useAuthStore();
   if (!token || !user) return <Navigate to="/login" replace />;
-  if (allowedRoles && !allowedRoles.includes(user.role)) return <Navigate to="/dashboard" replace />;
+  if (allowedRoles && !allowedRoles.includes(user.role))
+    return <Navigate to="/dashboard" replace />;
   return children;
 };
 
@@ -45,9 +46,16 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Toaster position="top-right" toastOptions={{
-        style: { background: '#131d35', color: '#f0f6ff', border: '1px solid rgba(255,255,255,0.1)' }
-      }} />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: '#131d35',
+            color: '#f0f6ff',
+            border: '1px solid rgba(255,255,255,0.1)',
+          },
+        }}
+      />
       <Routes>
         <Route path="/" element={<DashboardRedirect />} />
         <Route path="/login" element={<LoginPage />} />
@@ -55,13 +63,62 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="/verify/:certId" element={<VerifyCertPage />} />
-        <Route path="/dashboard" element={<ProtectedRoute><DashboardRedirect /></ProtectedRoute>} />
-        <Route path="/admin/*" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/staff/*" element={<ProtectedRoute allowedRoles={['staff']}><StaffDashboard /></ProtectedRoute>} />
-        <Route path="/student/*" element={<ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>} />
-        <Route path="/courses" element={<ProtectedRoute><CoursesPage /></ProtectedRoute>} />
-        <Route path="/courses/:id" element={<ProtectedRoute><CourseDetailPage /></ProtectedRoute>} />
-        <Route path="/certificates" element={<ProtectedRoute><CertificatesPage /></ProtectedRoute>} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardRedirect />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff/*"
+          element={
+            <ProtectedRoute allowedRoles={['staff']}>
+              <StaffDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/*"
+          element={
+            <ProtectedRoute allowedRoles={['student']}>
+              <StudentDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/courses"
+          element={
+            <ProtectedRoute>
+              <CoursesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/courses/:id"
+          element={
+            <ProtectedRoute>
+              <CourseDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/certificates"
+          element={
+            <ProtectedRoute>
+              <CertificatesPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

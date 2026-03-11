@@ -53,7 +53,7 @@ export default function ResetPasswordPage() {
     setLoading(true);
     try {
       const { data } = await axios.patch(`/api/auth/reset-password/${token}`, {
-        password
+        password,
       });
       toast.success('Password reset successfully!');
       // Login user with new credentials
@@ -73,20 +73,32 @@ export default function ResetPasswordPage() {
 
   if (!tokenValid) {
     return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, var(--accent-rose) 0%, var(--accent-orange) 100%)',
-        padding: 16
-      }}>
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background:
+            'linear-gradient(135deg, var(--accent-rose) 0%, var(--accent-orange) 100%)',
+          padding: 16,
+        }}
+      >
         <div className="card" style={{ maxWidth: 400, width: '100%' }}>
           <div style={{ textAlign: 'center', padding: 40 }}>
-            <FaTimes style={{ fontSize: 48, color: 'var(--accent-rose)', marginBottom: 16 }} />
-            <h2 style={{ color: 'var(--accent-rose)', marginBottom: 8 }}>Link Expired</h2>
+            <FaTimes
+              style={{
+                fontSize: 48,
+                color: 'var(--accent-rose)',
+                marginBottom: 16,
+              }}
+            />
+            <h2 style={{ color: 'var(--accent-rose)', marginBottom: 8 }}>
+              Link Expired
+            </h2>
             <p style={{ color: 'var(--text-muted)', marginBottom: 24 }}>
-              This password reset link has expired or is invalid. Please request a new one.
+              This password reset link has expired or is invalid. Please request
+              a new one.
             </p>
             <button
               onClick={() => navigate('/forgot-password')}
@@ -101,27 +113,35 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%)',
-      padding: 16
-    }}>
-      <div className="card" style={{
-        maxWidth: 400,
-        width: '100%',
-        animation: 'slideUp 0.3s ease-out'
-      }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background:
+          'linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%)',
+        padding: 16,
+      }}
+    >
+      <div
+        className="card"
+        style={{
+          maxWidth: 400,
+          width: '100%',
+          animation: 'slideUp 0.3s ease-out',
+        }}
+      >
         {/* Header */}
         <div style={{ marginBottom: 32 }}>
-          <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 28,
-            marginBottom: 8,
-            color: 'var(--text-primary)'
-          }}>
+          <h1
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 28,
+              marginBottom: 8,
+              color: 'var(--text-primary)',
+            }}
+          >
             Reset Password
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
@@ -129,18 +149,23 @@ export default function ResetPasswordPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+        >
           {/* New Password */}
           <div>
             <label className="form-label">New Password</label>
             <div style={{ position: 'relative' }}>
-              <FaLock style={{
-                position: 'absolute',
-                left: 12,
-                top: 14,
-                color: 'var(--text-muted)',
-                fontSize: 16
-              }} />
+              <FaLock
+                style={{
+                  position: 'absolute',
+                  left: 12,
+                  top: 14,
+                  color: 'var(--text-muted)',
+                  fontSize: 16,
+                }}
+              />
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
@@ -151,11 +176,13 @@ export default function ResetPasswordPage() {
                 required
               />
             </div>
-            <p style={{
-              fontSize: 12,
-              color: 'var(--text-muted)',
-              marginTop: 4
-            }}>
+            <p
+              style={{
+                fontSize: 12,
+                color: 'var(--text-muted)',
+                marginTop: 4,
+              }}
+            >
               At least 6 characters
             </p>
           </div>
@@ -164,13 +191,15 @@ export default function ResetPasswordPage() {
           <div>
             <label className="form-label">Confirm Password</label>
             <div style={{ position: 'relative' }}>
-              <FaLock style={{
-                position: 'absolute',
-                left: 12,
-                top: 14,
-                color: 'var(--text-muted)',
-                fontSize: 16
-              }} />
+              <FaLock
+                style={{
+                  position: 'absolute',
+                  left: 12,
+                  top: 14,
+                  color: 'var(--text-muted)',
+                  fontSize: 16,
+                }}
+              />
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={confirmPassword}
@@ -179,32 +208,49 @@ export default function ResetPasswordPage() {
                 className="form-input"
                 style={{
                   paddingLeft: 40,
-                  borderColor: confirmPassword && !passwordsMatch ? 'var(--accent-rose)' : 'var(--border-color)'
+                  borderColor:
+                    confirmPassword && !passwordsMatch
+                      ? 'var(--accent-rose)'
+                      : 'var(--border-color)',
                 }}
                 required
               />
             </div>
             {confirmPassword && !passwordsMatch && (
-              <p style={{ fontSize: 12, color: 'var(--accent-rose)', marginTop: 4 }}>
+              <p
+                style={{
+                  fontSize: 12,
+                  color: 'var(--accent-rose)',
+                  marginTop: 4,
+                }}
+              >
                 Passwords do not match
               </p>
             )}
             {confirmPassword && passwordsMatch && (
-              <p style={{ fontSize: 12, color: 'var(--accent-green)', marginTop: 4 }}>
+              <p
+                style={{
+                  fontSize: 12,
+                  color: 'var(--accent-green)',
+                  marginTop: 4,
+                }}
+              >
                 ✓ Passwords match
               </p>
             )}
           </div>
 
           {/* Show Password Checkbox */}
-          <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            fontSize: 13,
-            color: 'var(--text-muted)',
-            cursor: 'pointer'
-          }}>
+          <label
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              fontSize: 13,
+              color: 'var(--text-muted)',
+              cursor: 'pointer',
+            }}
+          >
             <input
               type="checkbox"
               checked={showPassword}
@@ -217,12 +263,14 @@ export default function ResetPasswordPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading || !passwordsMatch || !password || !confirmPassword}
+            disabled={
+              loading || !passwordsMatch || !password || !confirmPassword
+            }
             className="btn btn-primary"
             style={{
               opacity: loading || !passwordsMatch ? 0.6 : 1,
               cursor: loading || !passwordsMatch ? 'not-allowed' : 'pointer',
-              marginTop: 8
+              marginTop: 8,
             }}
           >
             {loading ? 'Resetting...' : 'Reset Password'}

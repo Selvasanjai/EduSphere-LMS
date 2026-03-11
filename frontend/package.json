@@ -7,6 +7,8 @@
     "axios": "^1.6.0",
     "chart.js": "^4.4.0",
     "framer-motion": "^10.16.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -20,9 +22,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://127.0.0.1:5002",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -36,6 +40,8 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "eslint": "^8.57.1",
+    "gh-pages": "^6.3.0",
+    "prettier": "^3.8.1"
   }
 }

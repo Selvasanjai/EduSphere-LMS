@@ -10,13 +10,15 @@ import {
   FaPlay,
   FaSignOutAlt,
   FaClock,
-  FaUser
+  FaUser,
 } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 
+import API_BASE_URL from '../../api';
+
 const StudentLiveClassPage = () => {
   const { classId } = useParams();
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const API_URL = API_BASE_URL;
 
   const [liveClass, setLiveClass] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -35,10 +37,9 @@ const StudentLiveClassPage = () => {
 
   const fetchLiveClass = async () => {
     try {
-      const response = await axios.get(
-        `${API_URL}/live-classes/${classId}`,
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
+      const response = await axios.get(`${API_URL}/live-classes/${classId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
       setLiveClass(response.data.data);
       setChatMessages(response.data.data.chatMessages || []);
       setStudents(response.data.data.currentStudents || []);
@@ -56,7 +57,9 @@ const StudentLiveClassPage = () => {
       await axios.post(
         `${API_URL}/live-classes/${classId}/join`,
         { studentName: user.name },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
       );
       setHasJoined(true);
       toast.success('Joined live class successfully!');
@@ -67,13 +70,16 @@ const StudentLiveClassPage = () => {
   };
 
   const handleLeaveClass = async () => {
-    if (!window.confirm('Are you sure you want to leave the live class?')) return;
+    if (!window.confirm('Are you sure you want to leave the live class?'))
+      return;
 
     try {
       await axios.post(
         `${API_URL}/live-classes/${classId}/leave`,
         {},
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
       );
       setHasJoined(false);
       toast.success('Left live class');
@@ -95,7 +101,9 @@ const StudentLiveClassPage = () => {
       await axios.post(
         `${API_URL}/live-classes/${classId}/chat`,
         { message: newMessage },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
       );
       setNewMessage('');
       fetchLiveClass();
@@ -109,7 +117,9 @@ const StudentLiveClassPage = () => {
       await axios.post(
         `${API_URL}/live-classes/${classId}/raise-hand`,
         {},
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
       );
       setRaisedHand(true);
       toast.success('Hand raised! Instructor will answer soon.');
@@ -126,7 +136,16 @@ const StudentLiveClassPage = () => {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#1a1a1a', color: 'white' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          backgroundColor: '#1a1a1a',
+          color: 'white',
+        }}
+      >
         <div style={{ textAlign: 'center' }}>
           <div className="spinner"></div>
           <p>Connecting to live class...</p>
@@ -137,8 +156,23 @@ const StudentLiveClassPage = () => {
 
   if (!liveClass) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
-        <div style={{ textAlign: 'center', padding: '2rem', background: 'white', borderRadius: '12px' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          backgroundColor: '#f5f5f5',
+        }}
+      >
+        <div
+          style={{
+            textAlign: 'center',
+            padding: '2rem',
+            background: 'white',
+            borderRadius: '12px',
+          }}
+        >
           <FaVideo size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
           <p>Live class not found</p>
         </div>
@@ -148,19 +182,46 @@ const StudentLiveClassPage = () => {
 
   if (liveClass.status !== 'live') {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
-        <div style={{ textAlign: 'center', padding: '3rem', background: 'white', borderRadius: '12px', maxWidth: '400px' }}>
-          <FaVideo size={48} style={{ opacity: 0.3, marginBottom: '1rem', color: '#999' }} />
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          backgroundColor: '#f5f5f5',
+        }}
+      >
+        <div
+          style={{
+            textAlign: 'center',
+            padding: '3rem',
+            background: 'white',
+            borderRadius: '12px',
+            maxWidth: '400px',
+          }}
+        >
+          <FaVideo
+            size={48}
+            style={{ opacity: 0.3, marginBottom: '1rem', color: '#999' }}
+          />
           <h2 style={{ margin: '1rem 0', color: '#333' }}>{liveClass.title}</h2>
           <p style={{ color: '#666', margin: '1rem 0' }}>
             This live class is not currently active.
           </p>
-          <div style={{ background: '#f8f9fa', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
+          <div
+            style={{
+              background: '#f8f9fa',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+            }}
+          >
             <p style={{ margin: '0.5rem 0', color: '#555' }}>
               <strong>Status:</strong> {liveClass.status.toUpperCase()}
             </p>
             <p style={{ margin: '0.5rem 0', color: '#555' }}>
-              <strong>Scheduled:</strong> {new Date(liveClass.scheduledStartTime).toLocaleString()}
+              <strong>Scheduled:</strong>{' '}
+              {new Date(liveClass.scheduledStartTime).toLocaleString()}
             </p>
           </div>
           <button
@@ -172,7 +233,7 @@ const StudentLiveClassPage = () => {
               border: 'none',
               borderRadius: '8px',
               fontWeight: '600',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Go Back
@@ -183,24 +244,53 @@ const StudentLiveClassPage = () => {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh', backgroundColor: '#1a1a1a', color: '#fff' }}>
+    <div
+      style={{
+        display: 'flex',
+        height: '100vh',
+        backgroundColor: '#1a1a1a',
+        color: '#fff',
+      }}
+    >
       {/* Main Video Area */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '1rem' }}>
-        {/* Header */}
-        <div style={{
+      <div
+        style={{
+          flex: 1,
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          flexDirection: 'column',
           padding: '1rem',
-          background: 'rgba(0, 0, 0, 0.5)',
-          borderRadius: '8px',
-          marginBottom: '1rem'
-        }}>
+        }}
+      >
+        {/* Header */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '1rem',
+            background: 'rgba(0, 0, 0, 0.5)',
+            borderRadius: '8px',
+            marginBottom: '1rem',
+          }}
+        >
           <div>
-            <h1 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h1
+              style={{
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
+            >
               <FaVideo /> {liveClass.title}
             </h1>
-            <p style={{ margin: '0.25rem 0 0 0', opacity: 0.8, fontSize: '0.9rem' }}>
+            <p
+              style={{
+                margin: '0.25rem 0 0 0',
+                opacity: 0.8,
+                fontSize: '0.9rem',
+              }}
+            >
               Instructor: {liveClass.staffId?.name || 'Unknown'}
             </p>
           </div>
@@ -217,7 +307,7 @@ const StudentLiveClassPage = () => {
                 border: 'none',
                 borderRadius: '8px',
                 fontWeight: '600',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
             >
               <FaSignOutAlt /> Leave Class
@@ -226,17 +316,19 @@ const StudentLiveClassPage = () => {
         </div>
 
         {/* Video Player */}
-        <div style={{
-          flex: 1,
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          borderRadius: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: '1rem',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
+        <div
+          style={{
+            flex: 1,
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '1rem',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
           <div style={{ textAlign: 'center' }}>
             <FaVideo size={80} style={{ opacity: 0.5, marginBottom: '1rem' }} />
             <p style={{ fontSize: '1.2rem', opacity: 0.9 }}>
@@ -254,7 +346,7 @@ const StudentLiveClassPage = () => {
                   borderRadius: '8px',
                   fontWeight: '600',
                   cursor: 'pointer',
-                  fontSize: '1rem'
+                  fontSize: '1rem',
                 }}
               >
                 <FaPlay /> Join Live Class
@@ -264,43 +356,49 @@ const StudentLiveClassPage = () => {
 
           {/* Live Indicator */}
           {hasJoined && (
-            <div style={{
-              position: 'absolute',
-              top: '1rem',
-              right: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              background: '#ff4444',
-              padding: '0.5rem 1rem',
-              borderRadius: '20px',
-              fontWeight: '600'
-            }}>
-              <span style={{
-                width: '10px',
-                height: '10px',
-                background: 'white',
-                borderRadius: '50%',
-                animation: 'pulse 1s infinite'
-              }}></span>
+            <div
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                background: '#ff4444',
+                padding: '0.5rem 1rem',
+                borderRadius: '20px',
+                fontWeight: '600',
+              }}
+            >
+              <span
+                style={{
+                  width: '10px',
+                  height: '10px',
+                  background: 'white',
+                  borderRadius: '50%',
+                  animation: 'pulse 1s infinite',
+                }}
+              ></span>
               LIVE
             </div>
           )}
 
           {/* Viewers Count */}
           {hasJoined && (
-            <div style={{
-              position: 'absolute',
-              bottom: '1rem',
-              right: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              background: 'rgba(0, 0, 0, 0.7)',
-              padding: '0.5rem 1rem',
-              borderRadius: '20px',
-              fontSize: '0.9rem'
-            }}>
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '1rem',
+                right: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                background: 'rgba(0, 0, 0, 0.7)',
+                padding: '0.5rem 1rem',
+                borderRadius: '20px',
+                fontSize: '0.9rem',
+              }}
+            >
               <FaUsers /> {liveClass.currentStudents?.length || 0} Watching
             </div>
           )}
@@ -308,13 +406,15 @@ const StudentLiveClassPage = () => {
 
         {/* Controls */}
         {hasJoined && (
-          <div style={{
-            display: 'flex',
-            gap: '0.5rem',
-            background: 'rgba(0, 0, 0, 0.5)',
-            padding: '1rem',
-            borderRadius: '8px'
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: '0.5rem',
+              background: 'rgba(0, 0, 0, 0.5)',
+              padding: '1rem',
+              borderRadius: '8px',
+            }}
+          >
             {liveClass.chatEnabled && (
               <button
                 onClick={() => setShowChat(!showChat)}
@@ -328,7 +428,7 @@ const StudentLiveClassPage = () => {
                   border: 'none',
                   borderRadius: '6px',
                   cursor: 'pointer',
-                  fontWeight: '600'
+                  fontWeight: '600',
                 }}
               >
                 <FaComment /> Chat ({chatMessages.length})
@@ -350,7 +450,7 @@ const StudentLiveClassPage = () => {
                   borderRadius: '6px',
                   cursor: raisedHand ? 'default' : 'pointer',
                   fontWeight: '600',
-                  opacity: raisedHand ? 0.7 : 1
+                  opacity: raisedHand ? 0.7 : 1,
                 }}
               >
                 <FaHandPaper /> {raisedHand ? 'Hand Raised' : 'Raise Hand'}
@@ -362,23 +462,27 @@ const StudentLiveClassPage = () => {
 
       {/* Chat Sidebar */}
       {hasJoined && showChat && (
-        <div style={{
-          width: '320px',
-          display: 'flex',
-          flexDirection: 'column',
-          background: '#2a2a2a',
-          borderLeft: '1px solid #444',
-          padding: '1rem',
-          gap: '1rem'
-        }}>
-          {/* Header */}
-          <div style={{
+        <div
+          style={{
+            width: '320px',
             display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingBottom: '1rem',
-            borderBottom: '1px solid #444'
-          }}>
+            flexDirection: 'column',
+            background: '#2a2a2a',
+            borderLeft: '1px solid #444',
+            padding: '1rem',
+            gap: '1rem',
+          }}
+        >
+          {/* Header */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingBottom: '1rem',
+              borderBottom: '1px solid #444',
+            }}
+          >
             <h3 style={{ margin: 0 }}>
               <FaComment /> Live Chat
             </h3>
@@ -389,7 +493,7 @@ const StudentLiveClassPage = () => {
                 border: 'none',
                 color: '#fff',
                 cursor: 'pointer',
-                fontSize: '1rem'
+                fontSize: '1rem',
               }}
             >
               <FaTimes />
@@ -397,37 +501,59 @@ const StudentLiveClassPage = () => {
           </div>
 
           {/* Messages */}
-          <div style={{
-            flex: 1,
-            overflowY: 'auto',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.75rem',
-            paddingRight: '0.5rem'
-          }}>
+          <div
+            style={{
+              flex: 1,
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem',
+              paddingRight: '0.5rem',
+            }}
+          >
             {chatMessages.length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#999', padding: '2rem 0' }}>
+              <div
+                style={{
+                  textAlign: 'center',
+                  color: '#999',
+                  padding: '2rem 0',
+                }}
+              >
                 <p>No messages yet</p>
               </div>
             ) : (
               chatMessages.map((msg, idx) => (
-                <div key={idx} style={{
-                  background: '#3a3a3a',
-                  padding: '0.75rem',
-                  borderRadius: '6px',
-                  fontSize: '0.85rem',
-                  lineHeight: '1.4'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                <div
+                  key={idx}
+                  style={{
+                    background: '#3a3a3a',
+                    padding: '0.75rem',
+                    borderRadius: '6px',
+                    fontSize: '0.85rem',
+                    lineHeight: '1.4',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      marginBottom: '0.25rem',
+                    }}
+                  >
                     <FaUser size={10} />
                     <strong style={{ fontSize: '0.8rem' }}>
                       {msg.studentName || 'Anonymous'}
                     </strong>
                   </div>
-                  <p style={{ margin: 0, color: '#ddd' }}>
-                    {msg.message}
-                  </p>
-                  <div style={{ fontSize: '0.7rem', color: '#888', marginTop: '0.25rem' }}>
+                  <p style={{ margin: 0, color: '#ddd' }}>{msg.message}</p>
+                  <div
+                    style={{
+                      fontSize: '0.7rem',
+                      color: '#888',
+                      marginTop: '0.25rem',
+                    }}
+                  >
                     {new Date(msg.timestamp).toLocaleTimeString()}
                   </div>
                 </div>
@@ -436,7 +562,10 @@ const StudentLiveClassPage = () => {
           </div>
 
           {/* Message Input */}
-          <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '0.5rem' }}>
+          <form
+            onSubmit={handleSendMessage}
+            style={{ display: 'flex', gap: '0.5rem' }}
+          >
             <input
               type="text"
               value={newMessage}
@@ -449,7 +578,7 @@ const StudentLiveClassPage = () => {
                 border: '1px solid #444',
                 borderRadius: '6px',
                 color: '#fff',
-                fontSize: '0.9rem'
+                fontSize: '0.9rem',
               }}
             />
             <button
@@ -461,7 +590,7 @@ const StudentLiveClassPage = () => {
                 border: 'none',
                 borderRadius: '6px',
                 cursor: 'pointer',
-                fontWeight: '600'
+                fontWeight: '600',
               }}
             >
               Send
