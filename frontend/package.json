@@ -2,7 +2,7 @@
   "name": "edusphere-frontend",
   "version": "1.0.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "https://selvasanjai.github.io/EduSphere-LMS",
   "dependencies": {
     "axios": "^1.6.0",
     "chart.js": "^4.4.0",
